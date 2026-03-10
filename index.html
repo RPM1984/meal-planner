@@ -44,19 +44,14 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
 .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .dname{font-size:26px;font-weight:800;letter-spacing:-1px}
 
-/* Macro targets */
-.targets{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:12px}
-.t-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
-.t-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.t-col{display:flex;flex-direction:column;align-items:center;gap:1px}
-.t-rem{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;line-height:1.1}
-.t-rem.ok{color:var(--accent)}
-.t-rem.low{color:var(--a2)}
-.t-rem.over{color:var(--red)}
-.t-lab{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
-.t-bar{height:3px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden;width:100%}
-.t-fill{height:100%;border-radius:2px;transition:width .3s}
-.t-eaten{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:3px}
+/* Macro targets — speedometer gauges */
+.targets{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px 8px;margin-bottom:12px}
+.t-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.t-cal-row{display:flex;justify-content:center;margin-bottom:4px}
+.t-row{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.t-col{display:flex;flex-direction:column;align-items:center}
+.t-gauge{width:100%;max-width:82px}
+.t-gauge-lg{width:60%;max-width:160px}
 
 /* Slots */
 .slots{display:flex;flex-direction:column;gap:8px}
@@ -187,9 +182,78 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
 .bs-val{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;color:var(--accent)}
 .bs-lab{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 
-/* Utils */
+/* Ingredient detail sheet */
+.det-hdr{display:flex;align-items:flex-start;gap:12px;padding:14px 16px 12px;border-bottom:1px solid var(--border)}
+.det-emoji{font-size:36px;line-height:1;flex-shrink:0}
+.det-info{flex:1;min-width:0}
+.det-name{font-size:18px;font-weight:800;line-height:1.2;letter-spacing:-.3px}
+.det-macro-row{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.det-mac{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.det-mac span{color:var(--text)}
+
+/* Ingredient rows */
+.ing-list{padding:0 16px}
+.ing-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--border)}
+.ing-row:last-child{border-bottom:none}
+.ing-left{min-width:0}
+.ing-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ing-contrib{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px}
+.ing-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.ing-amt{width:56px;background:var(--s2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;font-weight:500;text-align:center;padding:6px 4px;-moz-appearance:textfield}
+.ing-amt::-webkit-outer-spin-button,.ing-amt::-webkit-inner-spin-button{-webkit-appearance:none}
+.ing-amt:focus{outline:none;border-color:var(--accent)}
+.ing-unit{font-size:11px;color:var(--muted);min-width:28px}
+.ing-del{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:2px 4px;line-height:1;border-radius:6px;flex-shrink:0}
+.ing-del:active{color:#f06060}
+/* Add ingredient form */
+.ing-add-btn{display:flex;align-items:center;gap:8px;padding:12px 0 4px;color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;background:none;border:none;width:100%}
+.ing-add-form{background:var(--s2);border-radius:12px;padding:12px;margin-top:8px;display:flex;flex-direction:column;gap:8px}
+.ing-mode-seg{display:flex;gap:6px;margin-bottom:2px}
+.ing-mode-btn{flex:1;padding:6px 0;border-radius:8px;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:11px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;transition:all .15s}
+.ing-mode-btn.on{border-color:var(--accent);background:rgba(200,240,96,.1);color:var(--accent)}
+.ing-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;padding:7px 10px;box-sizing:border-box}
+.ing-search:focus{outline:none;border-color:var(--accent)}
+.ing-pick-list{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;margin-top:2px}
+.ing-pick-item{padding:8px 10px;border-radius:8px;font-size:12px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;background:var(--surface);color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:8px;transition:background .1s}
+.ing-pick-item:active{background:var(--border)}
+.ing-pick-item span{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap}
+.ing-add-row{display:flex;gap:6px;align-items:center}
+.ing-add-row label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;min-width:28px}
+.ifinp{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px}
+.ifinp:focus{outline:none;border-color:var(--accent)}
+.ifinp-name{font-family:'Syne',sans-serif;font-size:13px}
+.ing-macro-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ing-macro-wrap{display:flex;flex-direction:column;gap:3px}
+.ing-macro-wrap label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;text-align:center}
+.ing-macro-wrap input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 4px;text-align:center;-moz-appearance:textfield}
+.ing-macro-wrap input::-webkit-outer-spin-button,.ing-macro-wrap input::-webkit-inner-spin-button{-webkit-appearance:none}
+.ing-macro-wrap input:focus{outline:none;border-color:var(--accent)}
+.ing-macro-wrap input[readonly]{color:var(--muted)}
+.ing-unit-sel{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:6px 4px;width:62px}
+
+/* Detail footer */
+.det-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.det-total{background:var(--s2);border-radius:10px;padding:10px 14px;margin:0 16px 10px;display:flex;gap:0;overflow:hidden}
+.det-total-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px}
+.det-total-col+.det-total-col{border-left:1px solid var(--border)}
+.dt-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.dt-lab{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 .hidden{display:none!important}
 .section-gap{margin-bottom:16px}
+
+/* Category tabs */
+.lib-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.lib-acts{display:flex;gap:6px;flex-shrink:0}
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+.cat-tabs::-webkit-scrollbar{display:none}
+.ctab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;transition:all .15s}
+.ctab.on{border-color:var(--accent);background:rgba(200,240,96,.1);color:var(--accent)}
+.cat-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+
+/* Category picker in form */
+.cpick{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.cpopt{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;transition:all .15s}
+.cpopt.sel{border-color:var(--accent);background:rgba(200,240,96,.1);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -211,7 +275,15 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
 <!-- ══ LIBRARY PAGE ══ -->
 <div id="view-library" class="page hidden">
   <div class="libview">
-    <div class="sec-title">Meal Library</div>
+    <div class="lib-hdr">
+      <div class="sec-title" style="margin-bottom:0">Meal Library</div>
+      <div class="lib-acts">
+        <button class="ibtn" onclick="exportData()" title="Export backup">⬇</button>
+        <button class="ibtn" onclick="document.getElementById('import-inp').click()" title="Import backup">⬆</button>
+        <input type="file" id="import-inp" accept=".json" class="hidden" onchange="importData(event)">
+      </div>
+    </div>
+    <div class="cat-tabs" id="cat-tabs"></div>
     <div id="meal-list"></div>
   </div>
   <div class="fab-wrap">
@@ -224,6 +296,91 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
   <button class="nbtn on" id="nav-week" onclick="switchTab('week')"><span class="nico">⊞</span>Week</button>
   <button class="nbtn" id="nav-library" onclick="switchTab('library')"><span class="nico">◈</span>Meals</button>
 </div>
+</div>
+
+<!-- ══ INGREDIENT DETAIL SHEET ══ -->
+<div class="ov hidden" id="ov-detail" onclick="closeDetail()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-top">
+      <div class="shand-row"><div class="shandle"></div></div>
+      <!-- header -->
+      <div class="det-hdr" id="det-hdr">
+        <div class="det-emoji" id="det-emoji">🍽️</div>
+        <div class="det-info">
+          <div class="det-name" id="det-name">Meal</div>
+          <span class="cat-badge" id="det-badge" style="margin-top:6px;display:inline-block"></span>
+        </div>
+        <button class="close-btn" onclick="closeDetail()">✕</button>
+      </div>
+    </div>
+    <!-- live totals -->
+    <div class="det-total" id="det-total"></div>
+    <!-- ingredient list -->
+    <div class="sheet-body" style="padding:0 0 10px">
+      <div class="ing-list" id="ing-list"></div>
+      <div style="padding:0 16px 8px">
+        <button class="ing-add-btn" onclick="toggleAddIngForm()">＋ Add ingredient</button>
+        <div class="ing-add-form hidden" id="ing-add-form">
+          <!-- mode toggle -->
+          <div class="ing-mode-seg">
+            <button class="ing-mode-btn on" id="ing-mode-pick" onclick="setIngMode('pick')">From existing</button>
+            <button class="ing-mode-btn" id="ing-mode-manual" onclick="setIngMode('manual')">Manual</button>
+          </div>
+          <!-- PICK MODE -->
+          <div id="ing-pick-mode">
+            <input class="ing-search" id="ing-search" placeholder="Search ingredients…" oninput="renderIngPickList()" autocomplete="off">
+            <div class="ing-pick-list" id="ing-pick-list"></div>
+          </div>
+          <!-- MANUAL MODE -->
+          <div id="ing-manual-mode" class="hidden">
+            <div class="ing-add-row" style="margin-bottom:4px">
+              <label>Name</label>
+              <input class="ifinp ifinp-name" id="new-ing-name" placeholder="e.g. Spinach" autocomplete="off">
+            </div>
+            <div class="ing-add-row" style="margin-bottom:4px">
+              <label>Amt</label>
+              <input type="number" class="ifinp" id="new-ing-amt" placeholder="100" min="0" step="1" style="width:72px;flex:none">
+              <select class="ing-unit-sel" id="new-ing-unit">
+                <option>g</option><option>ml</option><option>srv</option>
+                <option>egg</option><option>finger</option><option>tsp</option><option>tbsp</option>
+              </select>
+            </div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px">Macros per 1 unit</div>
+            <div class="ing-macro-row">
+              <div class="ing-macro-wrap"><label>kcal <span style="color:var(--accent);font-size:7px">auto</span></label><input type="number" id="new-ing-k" placeholder="0" readonly style="color:var(--muted)"></div>
+              <div class="ing-macro-wrap"><label>protein</label><input type="number" id="new-ing-p" placeholder="0" min="0" step="0.001" oninput="calcNewIngKcal()"></div>
+              <div class="ing-macro-wrap"><label>carbs</label><input type="number" id="new-ing-c" placeholder="0" min="0" step="0.001" oninput="calcNewIngKcal()"></div>
+              <div class="ing-macro-wrap"><label>fat</label><input type="number" id="new-ing-f" placeholder="0" min="0" step="0.001" oninput="calcNewIngKcal()"></div>
+            </div>
+            <div style="font-size:9px;color:var(--muted);line-height:1.5;margin-top:4px">Enter macros per 1 unit (e.g. per 1g, per 1ml, per 1 egg)</div>
+            <button class="btn bp" style="margin-top:8px" onclick="confirmAddIngManual()">Add</button>
+          </div>
+          <!-- shared amount row for pick mode -->
+          <div id="ing-pick-amt-row" class="hidden" style="display:none">
+            <!-- cooking variant toggle — shown only for variant ingredients -->
+            <div id="ing-cook-toggle" class="hidden" style="margin-bottom:8px">
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Preparation</div>
+              <div class="ing-mode-seg">
+                <button class="ing-mode-btn on" id="ing-cook-raw" onclick="setCookVariant('raw')">Raw</button>
+                <button class="ing-mode-btn" id="ing-cook-cooked" onclick="setCookVariant('cooked')">Cooked</button>
+              </div>
+            </div>
+            <div class="ing-add-row" style="margin-top:4px">
+              <label>Amt</label>
+              <input type="number" class="ifinp" id="pick-ing-amt" placeholder="100" min="0" step="1" style="width:72px;flex:none">
+              <span id="pick-ing-unit-label" style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace"></span>
+            </div>
+            <button class="btn bp" style="margin-top:8px;width:100%" onclick="confirmAddIngPick()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- footer actions -->
+    <div class="det-footer">
+      <button class="btn bp" style="flex:1" onclick="saveDetailChanges()">Save Changes</button>
+      <button class="btn" id="det-change-btn" style="display:none" onclick="openChangeFromDetail()">Change Meal</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ SWAP SHEET ══ -->
@@ -263,7 +420,7 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
       <!-- Segment toggle (hidden when editing) -->
       <div class="seg" id="add-seg">
         <button class="seg-btn on" id="seg-quick" onclick="switchAddTab('quick')">Quick Add</button>
-        <button class="seg-btn" id="seg-build" onclick="switchAddTab('build')">Build Plate</button>
+        <button class="seg-btn" id="seg-build" onclick="switchAddTab('build')">Build</button>
       </div>
 
       <!-- ── QUICK ADD ── -->
@@ -273,6 +430,10 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
           <div><div class="aslab" style="margin-bottom:2px">Emoji</div><div style="font-size:12px;color:var(--muted)">Tap to change</div></div>
         </div>
         <div class="egrid hidden" id="emoji-grid"></div>
+        <div class="asec">
+          <div class="aslab">Category</div>
+          <div class="cpick" id="cat-pick"></div>
+        </div>
         <div class="asec">
           <div class="aslab">Meal Name</div>
           <input class="finp fname" id="inp-name" placeholder="e.g. Chicken & Rice">
@@ -292,42 +453,86 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
         </div>
       </div>
 
-      <!-- ── BUILD PLATE ── -->
+      <!-- ── BUILD ── -->
       <div id="tab-build" class="hidden">
 
-        <div class="section-gap">
-          <div class="aslab">① Protein</div>
-          <div class="food-grid" id="bld-proteins"></div>
-          <div id="pp-protein"></div>
+        <!-- Emoji + name + category -->
+        <div class="erow">
+          <div class="epick-btn" id="bld-emoji-display" onclick="toggleBldEmojiPicker()">🍽️</div>
+          <div><div class="aslab" style="margin-bottom:2px">Emoji</div><div style="font-size:12px;color:var(--muted)">Tap to change</div></div>
         </div>
-
-        <div class="section-gap">
-          <div class="aslab">② Carb</div>
-          <div class="food-grid" id="bld-carbs"></div>
-          <div id="pp-carb"></div>
+        <div class="egrid hidden" id="bld-emoji-grid"></div>
+        <div class="asec">
+          <div class="aslab">Category</div>
+          <div class="cpick" id="bld-cat-pick"></div>
         </div>
-
-        <div class="section-gap">
-          <div class="aslab">③ Fat &nbsp;<span class="opt-note">(optional)</span></div>
-          <div class="food-grid" id="bld-fats"></div>
-          <div id="pp-fat"></div>
-        </div>
-
-        <!-- Live totals -->
-        <div class="build-summary">
-          <div class="bs-label">Meal Total</div>
-          <div class="bs-row">
-            <div class="bs-col"><span class="bs-val" id="bt-cal">0</span><span class="bs-lab">kcal</span></div>
-            <div class="bs-col"><span class="bs-val" id="bt-p">0g</span><span class="bs-lab">protein</span></div>
-            <div class="bs-col"><span class="bs-val" id="bt-c">0g</span><span class="bs-lab">carbs</span></div>
-            <div class="bs-col"><span class="bs-val" id="bt-f">0g</span><span class="bs-lab">fat</span></div>
-          </div>
-        </div>
-
         <div class="asec">
           <div class="aslab">Meal Name</div>
           <input class="finp fname" id="bld-name" placeholder="e.g. Chicken & Rice">
         </div>
+
+        <!-- Live totals -->
+        <div class="det-total" id="bld-total" style="margin:0 0 4px"></div>
+
+        <!-- Ingredient list -->
+        <div class="ing-list" id="bld-ing-list"></div>
+
+        <!-- Add ingredient -->
+        <div style="padding:0 0 8px">
+          <button class="ing-add-btn" onclick="toggleBldIngForm()">＋ Add ingredient</button>
+          <div class="ing-add-form hidden" id="bld-ing-add-form">
+            <!-- mode toggle -->
+            <div class="ing-mode-seg">
+              <button class="ing-mode-btn on" id="bld-ing-mode-pick" onclick="setBldIngMode('pick')">From existing</button>
+              <button class="ing-mode-btn" id="bld-ing-mode-manual" onclick="setBldIngMode('manual')">Manual</button>
+            </div>
+            <!-- PICK -->
+            <div id="bld-ing-pick-mode">
+              <input class="ing-search" id="bld-ing-search" placeholder="Search ingredients…" oninput="renderBldIngPickList()" autocomplete="off">
+              <div class="ing-pick-list" id="bld-ing-pick-list"></div>
+            </div>
+            <!-- MANUAL -->
+            <div id="bld-ing-manual-mode" class="hidden">
+              <div class="ing-add-row" style="margin-bottom:4px">
+                <label>Name</label>
+                <input class="ifinp ifinp-name" id="bld-new-ing-name" placeholder="e.g. Spinach" autocomplete="off">
+              </div>
+              <div class="ing-add-row" style="margin-bottom:4px">
+                <label>Amt</label>
+                <input type="number" class="ifinp" id="bld-new-ing-amt" placeholder="100" min="0" step="1" style="width:72px;flex:none">
+                <select class="ing-unit-sel" id="bld-new-ing-unit">
+                  <option>g</option><option>ml</option><option>srv</option>
+                  <option>egg</option><option>finger</option><option>tsp</option><option>tbsp</option>
+                </select>
+              </div>
+              <div style="font-size:10px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px">Macros per 1 unit</div>
+              <div class="ing-macro-row">
+                <div class="ing-macro-wrap"><label>kcal <span style="color:var(--accent);font-size:7px">auto</span></label><input type="number" id="bld-new-ing-k" placeholder="0" readonly style="color:var(--muted)"></div>
+                <div class="ing-macro-wrap"><label>protein</label><input type="number" id="bld-new-ing-p" placeholder="0" min="0" step="0.001" oninput="calcBldIngKcal()"></div>
+                <div class="ing-macro-wrap"><label>carbs</label><input type="number" id="bld-new-ing-c" placeholder="0" min="0" step="0.001" oninput="calcBldIngKcal()"></div>
+                <div class="ing-macro-wrap"><label>fat</label><input type="number" id="bld-new-ing-f" placeholder="0" min="0" step="0.001" oninput="calcBldIngKcal()"></div>
+              </div>
+              <button class="btn bp" style="margin-top:8px" onclick="confirmBldAddIngManual()">Add</button>
+            </div>
+            <!-- amount row for pick mode -->
+            <div id="bld-ing-pick-amt-row" class="hidden" style="display:none">
+              <div id="bld-ing-cook-toggle" class="hidden" style="margin-bottom:8px">
+                <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Preparation</div>
+                <div class="ing-mode-seg">
+                  <button class="ing-mode-btn on" id="bld-ing-cook-raw" onclick="setBldCookVariant('raw')">Raw</button>
+                  <button class="ing-mode-btn" id="bld-ing-cook-cooked" onclick="setBldCookVariant('cooked')">Cooked</button>
+                </div>
+              </div>
+              <div class="ing-add-row" style="margin-top:4px">
+                <label>Amt</label>
+                <input type="number" class="ifinp" id="bld-pick-ing-amt" placeholder="100" min="0" step="1" style="width:72px;flex:none">
+                <span id="bld-pick-ing-unit-label" style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace"></span>
+              </div>
+              <button class="btn bp" style="margin-top:8px;width:100%" onclick="confirmBldAddIngPick()">Add</button>
+            </div>
+          </div>
+        </div>
+
         <div class="brow">
           <button class="btn bs" onclick="closeAdd()">Cancel</button>
           <button class="btn bp" onclick="saveBuildMeal()">Save Meal</button>
@@ -343,7 +548,29 @@ body{color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;-webkit-f
 // ═══════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════
-let meals      = lsGet("mp-meals") || JSON.parse(JSON.stringify(DEFAULT_MEALS));
+function lsGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function persist(){lsSet("mp-meals",meals);lsSet("mp-plan",plan)}
+
+// If DATA_VERSION has changed, wipe meals so fresh defaults load in
+if(lsGet("mp-data-version") !== DATA_VERSION){
+  lsSet("mp-data-version", DATA_VERSION);
+  localStorage.removeItem("mp-meals");
+}
+
+let meals = (()=>{
+  const stored = lsGet("mp-meals");
+  if(!stored) return JSON.parse(JSON.stringify(DEFAULT_MEALS));
+  const defMap = Object.fromEntries(DEFAULT_MEALS.map(m=>[m.id,m]));
+  return stored.map(m=>{
+    if(!m.categories) m.categories = m.category ? [m.category] : ["Breakfast"];
+    if(!m.ingredients || m.ingredients.length===0){
+      const def = defMap[m.id];
+      if(def && def.ingredients) return Object.assign({},def,m,{ingredients:def.ingredients, categories:m.categories});
+    }
+    return m;
+  });
+})();
 let plan       = lsGet("mp-plan")  || JSON.parse(JSON.stringify(DEFAULT_PLAN));
 // Detect today: JS getDay() is 0=Sun…6=Sat, DAYS is Mon…Sun so offset by 6
 const todayIdx = (new Date().getDay() + 6) % 7;
@@ -353,17 +580,11 @@ let swapTarget = null;
 let editId     = null;
 let selEmoji   = "🍽️";
 let addTab     = "quick";
+let libCat     = "All";       // active library category filter
+let selCategories = ["Breakfast"]; // selected categories in add/edit form (multi)
 // Builder state: arrays of {foodIdx, portionIdx} per category — supports multi-select
-let bld        = {protein:[], carb:[], fat:[]};
-let bldTotals  = {cal:0,p:0,c:0,f:0};
 
 // ═══════════════════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════════════════
-function lsGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
-function persist(){lsSet("mp-meals",meals);lsSet("mp-plan",plan)}
-
 // ═══════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════
@@ -395,25 +616,92 @@ function renderStrip(){
 
 function renderTargets(){
   const mac=dayMacros(currentDay);
-  const cols=[
-    {key:"calories",label:"kcal",  eaten:mac.calories, target:TARGETS.calories, unit:""},
-    {key:"protein", label:"protein",eaten:mac.protein,  target:TARGETS.protein,  unit:"g"},
-    {key:"carbs",   label:"carbs",  eaten:mac.carbs,    target:TARGETS.carbs,    unit:"g"},
-    {key:"fat",     label:"fat",    eaten:mac.fat,      target:TARGETS.fat,      unit:"g"},
-  ].map(d=>{
-    const rem=d.target-d.eaten;
-    const pct=Math.min(100,Math.round(d.eaten/d.target*100));
-    const cls=rem<0?"over":rem<d.target*.12?"low":"ok";
-    const fillCol=rem<0?"#f06060":rem<d.target*.12?"#f0a060":"#c8f060";
-    return`<div class="t-col">
-      <span class="t-rem ${cls}">${rem<0?"-":""}${Math.abs(rem)}${d.unit}</span>
-      <span class="t-lab">${d.label}</span>
-      <div class="t-bar"><div class="t-fill" style="width:${pct}%;background:${fillCol}"></div></div>
-      <span class="t-eaten">${d.eaten}/${d.target}</span>
-    </div>`;
-  }).join("");
+
+  function makeGauge(eaten, target, label, large){
+    const CX=40,CY=44,R=large?36:30,SW=large?6:5,NL=large?31:25;
+    const vw=large?96:80, vh=large?58:50;
+    const CIRC=2*Math.PI*R, SEMI=Math.PI*R;
+    const pct=eaten/target;
+    // Needle can sweep past target up to 20% over, mapped into arc 0–1.1
+    const pctNeedle=Math.max(0,Math.min(1.1, pct>1 ? 1+(pct-1)*0.5 : pct));
+    const pctArc=Math.max(0,Math.min(1,pct));
+    const over=pct>1, low=!over&&(target-eaten)<target*0.12;
+    const col=over?"#f06060":low?"#f0a060":"#c8f060";
+
+    // Arc fill
+    const fillLen=(pctArc*SEMI).toFixed(2);
+    const gap=(CIRC-pctArc*SEMI).toFixed(2);
+
+    // Needle angle: 0% = left (180°), 100% = right (0°), mapped via pctNeedle
+    const ang=(1-pctNeedle)*Math.PI;
+    const tx=(CX+NL*Math.cos(ang)).toFixed(1);
+    const ty=(CY-NL*Math.sin(ang)).toFixed(1);
+
+    // Minor ticks at 0/25/50/75%
+    const ticks=[0,.25,.5,.75].map(t=>{
+      const a=(1-t)*Math.PI;
+      const ix=(CX+(R+2)*Math.cos(a)).toFixed(1);
+      const iy=(CY-(R+2)*Math.sin(a)).toFixed(1);
+      const ox=(CX+(R+SW/2+3)*Math.cos(a)).toFixed(1);
+      const oy=(CY-(R+SW/2+3)*Math.sin(a)).toFixed(1);
+      return`<line x1="${ix}" y1="${iy}" x2="${ox}" y2="${oy}" stroke="var(--border)" stroke-width="1"/>`;
+    }).join("");
+
+    // Target marker at 100% (right end of arc) — a bright notch
+    const markerA=0; // 100% = angle 0 radians (right side)
+    const mInner=R-SW/2-1, mOuter=R+SW/2+1;
+    const mix=(CX+mInner*Math.cos(markerA)).toFixed(1);
+    const miy=(CY-mInner*Math.sin(markerA)).toFixed(1);
+    const mox=(CX+mOuter*Math.cos(markerA)).toFixed(1);
+    const moy=(CY-mOuter*Math.sin(markerA)).toFixed(1);
+    const marker=`<line x1="${mix}" y1="${miy}" x2="${mox}" y2="${moy}" stroke="#fff" stroke-width="${large?2:1.5}" stroke-linecap="round"/>`;
+
+    // eaten/target display — round eaten to nearest int
+    const eatenR=Math.round(eaten);
+    const topLine=`${eatenR}`;
+    const botLine=`/${target}`;
+    const fs=large?(eatenR>=1000?11:13):(eatenR>=100?9:11);
+    const lfs=large?9:7.5;
+    const CY_label=large?56:48;
+    const CY_top=large?30:26;
+    const CY_bot=large?40:35;
+
+    return`<svg class="${large?"t-gauge-lg":"t-gauge"}" viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg">
+      ${ticks}
+      ${marker}
+      <circle fill="none" stroke="var(--border)" stroke-width="${SW}" stroke-linecap="round"
+        cx="${CX}" cy="${CY}" r="${R}"
+        stroke-dasharray="${SEMI.toFixed(2)} ${(CIRC-SEMI).toFixed(2)}"
+        transform="rotate(180 ${CX} ${CY})"/>
+      <circle fill="none" stroke="${col}" stroke-width="${SW}" stroke-linecap="round"
+        cx="${CX}" cy="${CY}" r="${R}"
+        stroke-dasharray="${fillLen} ${gap}"
+        transform="rotate(180 ${CX} ${CY})"/>
+      ${marker}
+      <line x1="${CX}" y1="${CY}" x2="${tx}" y2="${ty}"
+        stroke="${col}" stroke-width="${large?2.5:2}" stroke-linecap="round"/>
+      <circle cx="${CX}" cy="${CY}" r="${large?4:3}" fill="${col}"/>
+      <text x="${CX}" y="${CY_top}" text-anchor="middle"
+        font-family="'DM Mono',monospace" font-size="${fs}" font-weight="700" fill="${col}">${topLine}</text>
+      <text x="${CX}" y="${CY_bot}" text-anchor="middle"
+        font-family="'DM Mono',monospace" font-size="${fs*0.85}" fill="var(--muted)">${botLine}</text>
+      <text x="${CX}" y="${CY_label}" text-anchor="middle"
+        font-family="'DM Mono',monospace" font-size="${lfs}" fill="var(--muted)">${label}</text>
+    </svg>`;
+  }
+
+  const calGauge=`<div class="t-col">${makeGauge(mac.calories,TARGETS.calories,"kcal",true)}</div>`;
+
+  const macroGauges=[
+    {label:"protein",eaten:mac.protein,  target:TARGETS.protein},
+    {label:"carbs",  eaten:mac.carbs,    target:TARGETS.carbs},
+    {label:"fat",    eaten:mac.fat,      target:TARGETS.fat},
+  ].map(d=>`<div class="t-col">${makeGauge(d.eaten,d.target,d.label,false)}</div>`).join("");
+
   document.getElementById("macro-targets").innerHTML=
-    `<div class="t-label">Remaining today</div><div class="t-row">${cols}</div>`;
+    `<div class="t-label">Remaining today</div>`+
+    `<div class="t-cal-row">${calGauge}</div>`+
+    `<div class="t-row">${macroGauges}</div>`;
 }
 
 function renderSlots(){
@@ -421,7 +709,10 @@ function renderSlots(){
     const id=plan[currentDay]?.[slot];
     const meal=id?meals.find(m=>m.id===id):null;
     const meta=SLOT_META[slot];
-    return`<div class="scard${!meal?" empty":""}" onclick="openSwap('${currentDay}','${slot}')">
+    const onclick=meal
+      ?`openDetail('${meal.id}','${currentDay}','${slot}')`
+      :`openSwap('${currentDay}','${slot}')`;
+    return`<div class="scard${!meal?" empty":""}" onclick="${onclick}">
       <div class="sicon">
         <span>${meal?(meal.emoji||"🍽️"):meta.icon}</span>
         <div class="sdot" style="background:${meta.color}">${meta.icon}</div>
@@ -435,21 +726,39 @@ function renderSlots(){
   }).join("");
 }
 
+function renderCatTabs(){
+  const tabs=["All",...CATEGORIES];
+  document.getElementById("cat-tabs").innerHTML=tabs.map(c=>
+    `<div class="ctab${c===libCat?" on":""}" onclick="setLibCat('${c}')">${c}</div>`
+  ).join("");
+}
+function setLibCat(c){libCat=c;renderLibrary();}
+
 function renderLibrary(){
-  document.getElementById("meal-list").innerHTML=meals.length===0
-    ?`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">No meals yet — tap + to add one.</div>`
-    :meals.map(m=>`
-    <div class="mcard">
-      <div class="memoji">${m.emoji||"🍽️"}</div>
-      <div class="mcinfo">
-        <div class="mcname">${esc(m.name)}</div>
-        <div class="mcmacros">${m.calories} kcal · ${m.protein}p · ${m.carbs}c · ${m.fat}f</div>
-      </div>
-      <div class="mcacts">
-        <button class="ibtn" onclick="openEdit('${m.id}')">✎</button>
-        <button class="ibtn danger" onclick="deleteMeal('${m.id}')">✕</button>
-      </div>
-    </div>`).join("");
+  renderCatTabs();
+  const filtered = (libCat==="All" ? meals : meals.filter(m=>(m.categories||[]).includes(libCat)))
+    .slice().sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById("meal-list").innerHTML=filtered.length===0
+    ?`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">${libCat==="All"?"No meals yet — tap + to add one.":"No "+libCat+" meals yet."}</div>`
+    :filtered.map(m=>{
+      const cats = m.categories || [m.category] || [];
+      const badgesHtml = cats.map(cat=>{
+        const cc=CAT_COLORS[cat]||{bg:"rgba(100,100,100,.15)",text:"#888"};
+        return`<span class="cat-badge" style="background:${cc.bg};color:${cc.text};margin-right:3px">${cat}</span>`;
+      }).join("");
+      return`<div class="mcard">
+        <div class="memoji" onclick="openDetail('${m.id}',null,null)" style="cursor:pointer">${m.emoji||"🍽️"}</div>
+        <div class="mcinfo" onclick="openDetail('${m.id}',null,null)" style="cursor:pointer">
+          <div class="mcname">${esc(m.name)}</div>
+          <div class="mcmacros">${m.calories} kcal · ${m.protein}p · ${m.carbs}c · ${m.fat}f</div>
+          <div style="margin-top:4px">${badgesHtml}</div>
+        </div>
+        <div class="mcacts">
+          <button class="ibtn" onclick="openEdit('${m.id}')">✎</button>
+          <button class="ibtn danger" onclick="deleteMeal('${m.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join("");
 }
 
 function render(){
@@ -471,20 +780,307 @@ function switchTab(tab){
 function selectDay(d){currentDay=d;render();}
 
 // ═══════════════════════════════════════════════
+// INGREDIENT DETAIL SHEET
+// ═══════════════════════════════════════════════
+let detMealId=null, detDay=null, detSlot=null;
+let detIngredients=[]; // working copy of ingredients for live editing
+
+function calcIngTotals(ings){
+  let cal=0,p=0,c=0,f=0;
+  ings.forEach(ing=>{cal+=ing.a*ing.k;p+=ing.a*ing.p;c+=ing.a*ing.c;f+=ing.a*ing.f;});
+  return{cal:Math.round(cal),p:Math.round(p),c:Math.round(c),f:Math.round(f)};
+}
+
+function renderDetTotal(){
+  const t=calcIngTotals(detIngredients);
+  document.getElementById("det-total").innerHTML=
+    `<div class="det-total-col"><span class="dt-val">${t.cal}</span><span class="dt-lab">kcal</span></div>`+
+    `<div class="det-total-col"><span class="dt-val">${t.p}<small style="font-size:9px">g</small></span><span class="dt-lab">protein</span></div>`+
+    `<div class="det-total-col"><span class="dt-val">${t.c}<small style="font-size:9px">g</small></span><span class="dt-lab">carbs</span></div>`+
+    `<div class="det-total-col"><span class="dt-val">${t.f}<small style="font-size:9px">g</small></span><span class="dt-lab">fat</span></div>`;
+}
+
+function renderIngList(){
+  if(!detIngredients||detIngredients.length===0){
+    document.getElementById("ing-list").innerHTML=
+      `<div style="padding:24px 0;text-align:center;color:var(--muted);font-size:13px">No ingredients recorded.<br>Use ＋ Add ingredient below.</div>`;
+    return;
+  }
+  document.getElementById("ing-list").innerHTML=detIngredients.map((ing,idx)=>{
+    const cal=Math.round(ing.a*ing.k);
+    const p=Math.round(ing.a*ing.p);
+    const c=Math.round(ing.a*ing.c);
+    const f=Math.round(ing.a*ing.f);
+    const stepVal = ing.u==="g"||ing.u==="ml" ? (ing.a>=50?5:1) : 0.5;
+    return`<div class="ing-row">
+      <div class="ing-left">
+        <div class="ing-name">${esc(ing.n)}</div>
+        <div class="ing-contrib">${cal} kcal · ${p}p · ${c}c · ${f}f</div>
+      </div>
+      <div class="ing-right">
+        <input type="number" class="ing-amt" value="${ing.a}" step="${stepVal}" min="0"
+          oninput="updateIng(${idx},this.value)">
+        <span class="ing-unit">${ing.u}</span>
+      </div>
+      <button class="ing-del" onclick="deleteIng(${idx})" title="Remove">✕</button>
+    </div>`;
+  }).join("");
+}
+
+function deleteIng(idx){
+  detIngredients.splice(idx,1);
+  renderDetTotal();
+  renderIngList();
+}
+
+// ── Add Ingredient ────────────────────────────────
+let ingPickSelected=null;  // {n,u,k,p,c,f} resolved (after variant chosen)
+let ingPickBase=null;      // base name if it has cooking variants
+let ingPickCookMode='raw'; // 'raw'|'cooked'
+
+function buildKnownIngs(){
+  // Start with COOKING_VARIANTS base names
+  const items=[];
+  Object.entries(COOKING_VARIANTS).forEach(([name,v])=>{
+    items.push({n:name, emoji:v.emoji, isVariant:true});
+  });
+  // Add unique ingredients from existing meals that are NOT covered by COOKING_VARIANTS
+  // (strip trailing " (raw)" / " (cooked)" to check coverage)
+  const variantBases=new Set(Object.keys(COOKING_VARIANTS));
+  const seen=new Set(Object.keys(COOKING_VARIANTS)); // avoid dupes
+  meals.forEach(m=>(m.ingredients||[]).forEach(ing=>{
+    const base=ing.n.replace(/\s*\((raw|cooked)\)\s*$/i,'').trim();
+    if(variantBases.has(base)) return; // covered by variant
+    if(seen.has(ing.n)) return;
+    seen.add(ing.n);
+    items.push({n:ing.n, u:ing.u, k:ing.k, p:ing.p, c:ing.c, f:ing.f, isVariant:false});
+  }));
+  return items.sort((a,b)=>a.n.localeCompare(b.n));
+}
+
+function toggleAddIngForm(){
+  const f=document.getElementById("ing-add-form");
+  const wasHidden=f.classList.contains("hidden");
+  f.classList.toggle("hidden");
+  if(wasHidden){
+    ingPickSelected=null; ingPickBase=null; ingPickCookMode='raw';
+    setIngMode("pick");
+    document.getElementById("ing-search").value="";
+    renderIngPickList();
+    setTimeout(()=>document.getElementById("ing-search").focus(),50);
+  }
+}
+
+function setIngMode(mode){
+  document.getElementById("ing-pick-mode").classList.toggle("hidden", mode!=="pick");
+  document.getElementById("ing-manual-mode").classList.toggle("hidden", mode!=="manual");
+  document.getElementById("ing-mode-pick").classList.toggle("on", mode==="pick");
+  document.getElementById("ing-mode-manual").classList.toggle("on", mode==="manual");
+  ingPickSelected=null; ingPickBase=null;
+  const amtRow=document.getElementById("ing-pick-amt-row");
+  amtRow.classList.add("hidden"); amtRow.style.display="none";
+  if(mode==="manual"){
+    ["new-ing-name","new-ing-amt","new-ing-k","new-ing-p","new-ing-c","new-ing-f"]
+      .forEach(id=>document.getElementById(id).value="");
+    document.getElementById("new-ing-unit").value="g";
+    setTimeout(()=>document.getElementById("new-ing-name").focus(),50);
+  }
+}
+
+function renderIngPickList(){
+  const q=(document.getElementById("ing-search").value||"").toLowerCase();
+  const all=buildKnownIngs();
+  const filtered=q?all.filter(i=>i.n.toLowerCase().includes(q)):all;
+  // Reset amount row when list refreshes
+  const amtRow=document.getElementById("ing-pick-amt-row");
+  amtRow.classList.add("hidden"); amtRow.style.display="none";
+  ingPickSelected=null; ingPickBase=null;
+  const list=document.getElementById("ing-pick-list");
+  if(!filtered.length){
+    list.innerHTML=`<div style="padding:10px;text-align:center;color:var(--muted);font-size:12px">No match — use Manual</div>`;
+    return;
+  }
+  list.innerHTML=filtered.map(ing=>{
+    if(ing.isVariant){
+      const v=COOKING_VARIANTS[ing.n];
+      return`<div class="ing-pick-item" onclick="selectIngredient(${JSON.stringify(ing.n).replace(/"/g,'&quot;')})">
+        <span style="font-weight:700">${ing.emoji||''} ${esc(ing.n)}</span>
+        <span>raw or cooked</span>
+      </div>`;
+    }
+    const perU=`${(ing.k).toFixed(2)}k · ${(ing.p).toFixed(2)}p`;
+    return`<div class="ing-pick-item" onclick="selectIngredient(${JSON.stringify(ing).replace(/"/g,'&quot;')})">
+      <span style="font-weight:700">${esc(ing.n)}</span>
+      <span>per ${ing.u} · ${perU}</span>
+    </div>`;
+  }).join("");
+}
+
+function selectIngredient(ingOrName){
+  // ingOrName: string = variant base name, object = regular ingredient
+  const amtRow=document.getElementById("ing-pick-amt-row");
+  const cookToggle=document.getElementById("ing-cook-toggle");
+  // Highlight
+  const name=typeof ingOrName==='string'?ingOrName:ingOrName.n;
+  document.querySelectorAll(".ing-pick-item").forEach(el=>{
+    el.style.background=el.querySelector("span").textContent.trim()===name||
+      el.querySelector("span").textContent.includes(name)?"rgba(200,240,96,.15)":"";
+  });
+  if(typeof ingOrName==='string'){
+    // Variant ingredient
+    ingPickBase=ingOrName;
+    ingPickCookMode='raw';
+    cookToggle.classList.remove("hidden");
+    document.getElementById("ing-cook-raw").classList.add("on");
+    document.getElementById("ing-cook-cooked").classList.remove("on");
+    resolvePickVariant();
+  } else {
+    // Regular ingredient — no variant
+    ingPickBase=null;
+    cookToggle.classList.add("hidden");
+    ingPickSelected=ingOrName;
+  }
+  // Show amount row
+  amtRow.classList.remove("hidden"); amtRow.style.display="";
+  const u=ingPickSelected?ingPickSelected.u:COOKING_VARIANTS[ingPickBase].u;
+  document.getElementById("pick-ing-unit-label").textContent=u;
+  document.getElementById("pick-ing-amt").value=u==="g"||u==="ml"?100:1;
+  setTimeout(()=>document.getElementById("pick-ing-amt").focus(),50);
+}
+
+function setCookVariant(mode){
+  ingPickCookMode=mode;
+  document.getElementById("ing-cook-raw").classList.toggle("on", mode==="raw");
+  document.getElementById("ing-cook-cooked").classList.toggle("on", mode==="cooked");
+  resolvePickVariant();
+}
+
+function resolvePickVariant(){
+  if(!ingPickBase) return;
+  const v=COOKING_VARIANTS[ingPickBase];
+  const macros=v[ingPickCookMode];
+  ingPickSelected={
+    n:`${ingPickBase} (${ingPickCookMode})`,
+    u:v.u,
+    k:macros.k, p:macros.p, c:macros.c, f:macros.f
+  };
+}
+
+function confirmAddIngPick(){
+  if(!ingPickSelected) return;
+  const amt=parseFloat(document.getElementById("pick-ing-amt").value);
+  if(isNaN(amt)||amt<=0){document.getElementById("pick-ing-amt").focus();return;}
+  detIngredients.push(Object.assign({},ingPickSelected,{a:amt}));
+  renderDetTotal(); renderIngList();
+  document.getElementById("ing-add-form").classList.add("hidden");
+  ingPickSelected=null; ingPickBase=null;
+}
+
+function calcNewIngKcal(){
+  const p=parseFloat(document.getElementById("new-ing-p").value)||0;
+  const c=parseFloat(document.getElementById("new-ing-c").value)||0;
+  const f=parseFloat(document.getElementById("new-ing-f").value)||0;
+  const k=+(p*4+c*4+f*9).toFixed(4);
+  document.getElementById("new-ing-k").value=k>0?k:"";
+}
+
+function confirmAddIngManual(){
+  const name=document.getElementById("new-ing-name").value.trim();
+  const amt=parseFloat(document.getElementById("new-ing-amt").value);
+  const unit=document.getElementById("new-ing-unit").value;
+  const k=parseFloat(document.getElementById("new-ing-k").value)||0;
+  const p=parseFloat(document.getElementById("new-ing-p").value)||0;
+  const c=parseFloat(document.getElementById("new-ing-c").value)||0;
+  const f=parseFloat(document.getElementById("new-ing-f").value)||0;
+  if(!name||isNaN(amt)||amt<=0){document.getElementById("new-ing-name").focus();return;}
+  detIngredients.push({n:name,a:amt,u:unit,k,p,c,f});
+  renderDetTotal(); renderIngList();
+  document.getElementById("ing-add-form").classList.add("hidden");
+}
+function updateIng(idx, val){
+  const v=parseFloat(val);
+  if(isNaN(v)||v<0)return;
+  detIngredients[idx]=Object.assign({},detIngredients[idx],{a:v});
+  renderDetTotal();
+  // Update only this row's contribution text (no full re-render to preserve focus)
+  const rows=document.querySelectorAll("#ing-list .ing-row");
+  const ing=detIngredients[idx];
+  const cal=Math.round(ing.a*ing.k), p=Math.round(ing.a*ing.p),
+        c=Math.round(ing.a*ing.c), f=Math.round(ing.a*ing.f);
+  if(rows[idx]) rows[idx].querySelector(".ing-contrib").textContent=
+    `${cal} kcal · ${p}p · ${c}c · ${f}f`;
+}
+
+function openDetail(mealId, day, slot){
+  const m=meals.find(x=>x.id===mealId); if(!m) return;
+  detMealId=mealId; detDay=day; detSlot=slot;
+  // Deep clone ingredients so edits don't mutate original until saved
+  detIngredients=(m.ingredients||[]).map(x=>Object.assign({},x));
+  // Header
+  document.getElementById("det-emoji").textContent=m.emoji||"🍽️";
+  document.getElementById("det-name").textContent=m.name;
+  const cats=m.categories||[m.category]||[];
+  document.getElementById("det-badge").innerHTML=cats.map(cat=>{
+    const cc=CAT_COLORS[cat]||{bg:"rgba(100,100,100,.15)",text:"#888"};
+    return`<span class="cat-badge" style="background:${cc.bg};color:${cc.text};margin-right:3px">${cat}</span>`;
+  }).join("");
+  // Show "Change Meal" only in slot context
+  document.getElementById("det-change-btn").style.display=day?"":"none";
+  renderDetTotal();
+  renderIngList();
+  document.getElementById("ov-detail").classList.remove("hidden");
+  document.body.style.overflow="hidden";
+}
+
+function closeDetail(){
+  document.getElementById("ov-detail").classList.add("hidden");
+  document.body.style.overflow="";
+  detMealId=null; detDay=null; detSlot=null; detIngredients=[];
+}
+
+function saveDetailChanges(){
+  if(!detMealId)return;
+  const t=calcIngTotals(detIngredients);
+  meals=meals.map(m=>{
+    if(m.id!==detMealId)return m;
+    return Object.assign({},m,{
+      ingredients:detIngredients.map(x=>Object.assign({},x)),
+      calories:t.cal, protein:t.p, carbs:t.c, fat:t.f
+    });
+  });
+  persist(); render();
+  // Flash save confirmation
+  const btn=document.querySelector("#ov-detail .det-footer .btn.bp");
+  btn.textContent="Saved ✓"; btn.style.background="var(--accent)"; btn.style.color="#0c0c0c";
+  setTimeout(()=>{btn.textContent="Save Changes";btn.style.background="";btn.style.color="";},1500);
+}
+
+function openChangeFromDetail(){
+  const day=detDay, slot=detSlot;
+  closeDetail();
+  openSwap(day,slot);
+}
+
+// ═══════════════════════════════════════════════
 // SWAP SHEET
 // ═══════════════════════════════════════════════
 function openSwap(day,slot){
   swapTarget={day,slot};
-  document.getElementById("swap-title").textContent="Swap "+slot;
+  document.getElementById("swap-title").textContent=slot;
   document.getElementById("swap-sub").textContent=FULL_DAYS[DAYS.indexOf(day)];
   const cur=plan[day]?.[slot];
-  document.getElementById("swap-list").innerHTML=meals.map(m=>`
+  const filtered=meals
+    .filter(m=>(m.categories||[m.category]).includes(slot))
+    .sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById("swap-list").innerHTML=(filtered.length===0
+    ?`<div style="text-align:center;padding:32px 0;color:var(--muted);font-size:13px">No ${slot} meals in your library yet.<br><br><span style="color:var(--accent);cursor:pointer" onclick="closeSwap()">Add one from the Meals tab ↗</span></div>`
+    :filtered.map(m=>`
     <div class="swopt${m.id===cur?" cur":""}" onclick="doSwap('${m.id}')">
       ${m.id===cur?`<span style="font-size:11px;color:var(--accent);flex-shrink:0">✓</span>`:""}
       <span class="swemoji">${m.emoji||"🍽️"}</span>
       <span class="swname">${esc(m.name)}</span>
       <div class="swmac"><div>${m.calories} kcal</div><div>${m.protein}p·${m.carbs}c·${m.fat}f</div></div>
-    </div>`).join("");
+    </div>`).join(""));
   document.getElementById("ov-swap").classList.remove("hidden");
   document.body.style.overflow="hidden";
 }
@@ -522,6 +1118,21 @@ function closeAdd(){
   document.getElementById("ov-add").classList.add("hidden");
   document.body.style.overflow="";editId=null;
 }
+function renderCatPick(){
+  document.getElementById("cat-pick").innerHTML=CATEGORIES.map(c=>
+    `<div class="cpopt${selCategories.includes(c)?" sel":""}" onclick="pickCat('${c}')">${c}</div>`
+  ).join("");
+}
+function pickCat(c){
+  if(selCategories.includes(c)){
+    if(selCategories.length>1) selCategories=selCategories.filter(x=>x!==c);
+  } else {
+    selCategories=[...selCategories,c];
+  }
+  renderCatPick();
+  if(addTab==="build") renderBldCatPick();
+}
+
 function clearQuickForm(){
   document.getElementById("inp-name").value="";
   document.getElementById("inp-cal").value="";
@@ -530,21 +1141,24 @@ function clearQuickForm(){
   document.getElementById("inp-fat").value="";
   document.getElementById("emoji-display").textContent="🍽️";
   document.getElementById("emoji-grid").classList.add("hidden");
+  selCategories=["Breakfast"];
+  renderCatPick();
 }
 function openEdit(id){
   const m=meals.find(x=>x.id===id);if(!m)return;
   editId=id; selEmoji=m.emoji||"🍽️";
+  selCategories=m.categories||[m.category||"Breakfast"];
   document.getElementById("add-title").textContent="Edit Meal";
   document.getElementById("add-seg").classList.add("hidden");
   document.getElementById("inp-name").value=m.name;
   document.getElementById("inp-cal").value=m.calories;
-  // When editing, make cal editable so user can correct if needed
   document.getElementById("inp-cal").removeAttribute("readonly");
   document.getElementById("inp-pro").value=m.protein;
   document.getElementById("inp-carb").value=m.carbs;
   document.getElementById("inp-fat").value=m.fat;
   document.getElementById("emoji-display").textContent=selEmoji;
   document.getElementById("emoji-grid").classList.add("hidden");
+  renderCatPick();
   switchAddTab("quick");
   document.getElementById("ov-add").classList.remove("hidden");
   document.body.style.overflow="hidden";
@@ -555,7 +1169,12 @@ function switchAddTab(tab){
   document.getElementById("tab-build").classList.toggle("hidden",tab!=="build");
   document.getElementById("seg-quick").classList.toggle("on",tab==="quick");
   document.getElementById("seg-build").classList.toggle("on",tab==="build");
-  if(tab==="build")renderBuildFoods();
+  if(tab==="build"){
+    document.getElementById("bld-emoji-display").textContent = selEmoji;
+    renderBldCatPick();
+    renderBldIngList();
+    renderBldTotal();
+  }
 }
 
 // Emoji
@@ -587,6 +1206,7 @@ function saveQuickMeal(){
   const name=document.getElementById("inp-name").value.trim();if(!name)return;
   const entry={
     id:editId||uid(), name,
+    categories:selCategories.slice(),
     calories:+document.getElementById("inp-cal").value||0,
     protein:+document.getElementById("inp-pro").value||0,
     carbs:+document.getElementById("inp-carb").value||0,
@@ -603,132 +1223,250 @@ function deleteMeal(id){
   persist();render();
 }
 
+// ── Export / Import ──────────────────────────────
+function exportData(){
+  const blob=new Blob([JSON.stringify({meals,plan},null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="meal-planner-backup-"+new Date().toISOString().slice(0,10)+".json";
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(!d.meals||!Array.isArray(d.meals))throw new Error("Invalid file");
+      if(!confirm("This will replace all your current meals and plan. Continue?"))return;
+      meals=d.meals; plan=d.plan||{};
+      persist();render();
+      alert("Import successful — "+meals.length+" meals loaded.");
+    }catch(err){alert("Import failed: "+err.message);}
+  };
+  r.readAsText(file);
+  e.target.value=""; // reset so same file can be re-imported
+}
+
 // ═══════════════════════════════════════════════
-// PLATE BUILDER
+// BUILD TAB — ingredient builder
 // ═══════════════════════════════════════════════
+let bldIngredients = [];
+let bldIngPickSelected = null;
+let bldIngPickBase = null;
+let bldIngPickCookMode = 'raw';
+
 function resetBuilder(){
-  bld={protein:[],carb:[],fat:[]};
-  bldTotals={cal:0,p:0,c:0,f:0};
-  ["protein","carb","fat"].forEach(t=>{
-    const el=document.getElementById("pp-"+t);
-    if(el)el.innerHTML="";
-  });
-  updateBuildDisplay();
-  const ni=document.getElementById("bld-name");
-  if(ni)ni.value="";
+  bldIngredients = [];
+  document.getElementById("bld-name").value = "";
+  document.getElementById("bld-ing-list").innerHTML = "";
+  renderBldTotal();
+  const f = document.getElementById("bld-ing-add-form");
+  if(f) f.classList.add("hidden");
 }
 
-function renderBuildFoods(){
-  [["protein","bld-proteins"],["carb","bld-carbs"],["fat","bld-fats"]].forEach(([type,elId])=>{
-    document.getElementById(elId).innerHTML=FOODS[type].map((f,i)=>{
-      const sel=bld[type].some(x=>x.foodIdx===i);
-      return`<div class="fopt${sel?" sel":""}" onclick="pickFood('${type}',${i})">
-        <span class="fopt-em">${f.emoji}</span>
-        <span class="fopt-nm">${f.name}</span>
-      </div>`;
-    }).join("");
-  });
+function renderBldTotal(){
+  const t = bldIngredients.reduce((a,i)=>({
+    k:a.k+i.k*i.a, p:a.p+i.p*i.a, c:a.c+i.c*i.a, f:a.f+i.f*i.a
+  }),{k:0,p:0,c:0,f:0});
+  document.getElementById("bld-total").innerHTML =
+    `<span><b>${Math.round(t.k)}</b> kcal</span>`+
+    `<span><b>${t.p.toFixed(1)}</b>g protein</span>`+
+    `<span><b>${t.c.toFixed(1)}</b>g carbs</span>`+
+    `<span><b>${t.f.toFixed(1)}</b>g fat</span>`;
 }
 
-function pickFood(type,idx){
-  const arr=bld[type];
-  const existing=arr.findIndex(x=>x.foodIdx===idx);
-  if(existing>=0){
-    // Deselect — remove from array and re-render pickers
-    arr.splice(existing,1);
-  } else {
-    // Select — add with default portion 0
-    arr.push({foodIdx:idx, portionIdx:0});
-  }
-  renderBuildFoods();
-  renderAllPP(type);
-  recalcBuild();
-  updateNameSuggestion();
-}
-
-function renderAllPP(type){
-  const arr=bld[type];
-  if(arr.length===0){
-    document.getElementById("pp-"+type).innerHTML="";
+function renderBldIngList(){
+  const el = document.getElementById("bld-ing-list");
+  if(!bldIngredients.length){
+    el.innerHTML = `<div style="padding:12px 0;text-align:center;color:var(--muted);font-size:13px">No ingredients yet</div>`;
     return;
   }
-  document.getElementById("pp-"+type).innerHTML=arr.map((sel,arrIdx)=>{
-    const food=FOODS[type][sel.foodIdx];
-    const unit=food.unit||"g";
-    const ptns=food.portions.map((pt,i)=>{
-      const mac=macro(food,pt.g);
-      const isSel=sel.portionIdx===i;
-      return`<div class="pp-opt${isSel?" sel":""}" onclick="pickPortion('${type}',${arrIdx},${i})">
-        <div class="pp-size">${pt.s}</div>
-        <div class="pp-vis">${pt.vis}</div>
-        <div class="pp-mac">${mac.cal} kcal</div>
-      </div>`;
-    }).join("");
-    return`<div class="pp-wrap">
-      <div class="pp-food-row">
-        <span class="pp-em">${food.emoji}</span>
-        <div>
-          <div class="pp-fname">${food.name}</div>
-          ${food.note?`<div class="pp-note">${food.note}</div>`:""}
-        </div>
+  el.innerHTML = bldIngredients.map((ing,i)=>{
+    const k=Math.round(ing.k*ing.a), p=(ing.p*ing.a).toFixed(1);
+    const c=(ing.c*ing.a).toFixed(1), f=(ing.f*ing.a).toFixed(1);
+    return`<div class="ing-row">
+      <div class="ing-row-left">
+        <div class="ing-name">${esc(ing.n)}</div>
+        <div class="ing-mac">${k} kcal · ${p}p · ${c}c · ${f}f</div>
       </div>
-      <div class="pp-portions">${ptns}</div>
+      <div class="ing-row-right">
+        <input type="number" class="ing-amt-inp" value="${ing.a}" min="0" step="1"
+          oninput="updateBldIng(${i},this.value)">
+        <span class="ing-unit">${ing.u}</span>
+        <button class="ing-del" onclick="removeBldIng(${i})">✕</button>
+      </div>
     </div>`;
   }).join("");
 }
 
-function pickPortion(type,arrIdx,portionIdx){
-  if(!bld[type][arrIdx])return;
-  bld[type][arrIdx].portionIdx=portionIdx;
-  renderAllPP(type);
-  recalcBuild();
-  updateNameSuggestion();
+function updateBldIng(i, val){
+  const v = parseFloat(val);
+  if(!isNaN(v) && v >= 0){ bldIngredients[i].a = v; renderBldTotal(); }
+}
+function removeBldIng(i){
+  bldIngredients.splice(i,1);
+  renderBldIngList(); renderBldTotal();
 }
 
-function recalcBuild(){
-  bldTotals={cal:0,p:0,c:0,f:0};
-  ["protein","carb","fat"].forEach(type=>{
-    bld[type].forEach(sel=>{
-      const food=FOODS[type][sel.foodIdx];
-      const g=food.portions[sel.portionIdx].g;
-      const mac=macro(food,g);
-      bldTotals.cal+=mac.cal; bldTotals.p+=mac.p; bldTotals.c+=mac.c; bldTotals.f+=mac.f;
-    });
+// ── Bld Emoji / Category ──
+function toggleBldEmojiPicker(){
+  const g = document.getElementById("bld-emoji-grid");
+  if(g.classList.contains("hidden")){
+    g.innerHTML = EMOJIS.map(e=>`<div class="eopt${e===selEmoji?" sel":""}" onclick="pickBldEmoji('${e}')">${e}</div>`).join("");
+    g.classList.remove("hidden");
+  } else { g.classList.add("hidden"); }
+}
+function pickBldEmoji(e){
+  selEmoji = e;
+  document.getElementById("bld-emoji-display").textContent = e;
+  document.getElementById("bld-emoji-grid").classList.add("hidden");
+}
+function renderBldCatPick(){
+  document.getElementById("bld-cat-pick").innerHTML = CATEGORIES.map(c=>
+    `<div class="cpopt${selCategories.includes(c)?" sel":""}" onclick="pickCat('${c}')">${c}</div>`
+  ).join("");
+}
+
+// ── Bld ingredient picker ──
+function toggleBldIngForm(){
+  const f = document.getElementById("bld-ing-add-form");
+  const wasHidden = f.classList.contains("hidden");
+  f.classList.toggle("hidden");
+  if(wasHidden){
+    bldIngPickSelected = null; bldIngPickBase = null; bldIngPickCookMode = 'raw';
+    setBldIngMode("pick");
+    document.getElementById("bld-ing-search").value = "";
+    renderBldIngPickList();
+    setTimeout(()=>document.getElementById("bld-ing-search").focus(), 50);
+  }
+}
+
+function setBldIngMode(mode){
+  document.getElementById("bld-ing-pick-mode").classList.toggle("hidden", mode!=="pick");
+  document.getElementById("bld-ing-manual-mode").classList.toggle("hidden", mode!=="manual");
+  document.getElementById("bld-ing-mode-pick").classList.toggle("on", mode==="pick");
+  document.getElementById("bld-ing-mode-manual").classList.toggle("on", mode==="manual");
+  bldIngPickSelected = null; bldIngPickBase = null;
+  const amtRow = document.getElementById("bld-ing-pick-amt-row");
+  amtRow.classList.add("hidden"); amtRow.style.display = "none";
+  if(mode==="manual"){
+    ["bld-new-ing-name","bld-new-ing-amt","bld-new-ing-k","bld-new-ing-p","bld-new-ing-c","bld-new-ing-f"]
+      .forEach(id=>document.getElementById(id).value="");
+    document.getElementById("bld-new-ing-unit").value = "g";
+    setTimeout(()=>document.getElementById("bld-new-ing-name").focus(), 50);
+  }
+}
+
+function renderBldIngPickList(){
+  const q = (document.getElementById("bld-ing-search").value||"").toLowerCase();
+  const all = buildKnownIngs();
+  const filtered = q ? all.filter(i=>i.n.toLowerCase().includes(q)) : all;
+  const amtRow = document.getElementById("bld-ing-pick-amt-row");
+  amtRow.classList.add("hidden"); amtRow.style.display = "none";
+  bldIngPickSelected = null; bldIngPickBase = null;
+  const list = document.getElementById("bld-ing-pick-list");
+  if(!filtered.length){
+    list.innerHTML = `<div style="padding:10px;text-align:center;color:var(--muted);font-size:12px">No match — use Manual</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(ing=>{
+    if(ing.isVariant){
+      return`<div class="ing-pick-item" onclick="bldSelectIngredient(${JSON.stringify(ing.n).replace(/"/g,'&quot;')})">
+        <span style="font-weight:700">${ing.emoji||''} ${esc(ing.n)}</span>
+        <span>raw or cooked</span>
+      </div>`;
+    }
+    const perU = `${(ing.k).toFixed(2)}k · ${(ing.p).toFixed(2)}p`;
+    return`<div class="ing-pick-item" onclick="bldSelectIngredient(${JSON.stringify(ing).replace(/"/g,'&quot;')})">
+      <span style="font-weight:700">${esc(ing.n)}</span>
+      <span>per ${ing.u} · ${perU}</span>
+    </div>`;
+  }).join("");
+}
+
+function bldSelectIngredient(ingOrName){
+  const amtRow = document.getElementById("bld-ing-pick-amt-row");
+  const cookToggle = document.getElementById("bld-ing-cook-toggle");
+  const name = typeof ingOrName==='string' ? ingOrName : ingOrName.n;
+  document.querySelectorAll("#bld-ing-pick-list .ing-pick-item").forEach(el=>{
+    el.style.background = el.querySelector("span").textContent.trim().startsWith(name) ? "rgba(200,240,96,.15)" : "";
   });
-  updateBuildDisplay();
+  if(typeof ingOrName==='string'){
+    bldIngPickBase = ingOrName;
+    bldIngPickCookMode = 'raw';
+    cookToggle.classList.remove("hidden");
+    document.getElementById("bld-ing-cook-raw").classList.add("on");
+    document.getElementById("bld-ing-cook-cooked").classList.remove("on");
+    resolveBldPickVariant();
+  } else {
+    bldIngPickBase = null;
+    cookToggle.classList.add("hidden");
+    bldIngPickSelected = ingOrName;
+  }
+  amtRow.classList.remove("hidden"); amtRow.style.display = "";
+  const u = bldIngPickSelected ? bldIngPickSelected.u : COOKING_VARIANTS[bldIngPickBase].u;
+  document.getElementById("bld-pick-ing-unit-label").textContent = u;
+  document.getElementById("bld-pick-ing-amt").value = (u==="g"||u==="ml") ? 100 : 1;
+  setTimeout(()=>document.getElementById("bld-pick-ing-amt").focus(), 50);
 }
 
-function updateBuildDisplay(){
-  document.getElementById("bt-cal").textContent=bldTotals.cal;
-  document.getElementById("bt-p").textContent=bldTotals.p+"g";
-  document.getElementById("bt-c").textContent=bldTotals.c+"g";
-  document.getElementById("bt-f").textContent=bldTotals.f+"g";
+function setBldCookVariant(mode){
+  bldIngPickCookMode = mode;
+  document.getElementById("bld-ing-cook-raw").classList.toggle("on", mode==="raw");
+  document.getElementById("bld-ing-cook-cooked").classList.toggle("on", mode==="cooked");
+  resolveBldPickVariant();
+}
+function resolveBldPickVariant(){
+  if(!bldIngPickBase) return;
+  const v = COOKING_VARIANTS[bldIngPickBase];
+  const macros = v[bldIngPickCookMode];
+  bldIngPickSelected = { n:`${bldIngPickBase} (${bldIngPickCookMode})`, u:v.u, k:macros.k, p:macros.p, c:macros.c, f:macros.f };
 }
 
-function updateNameSuggestion(){
-  const parts=["protein","carb","fat"].flatMap(t=>
-    bld[t].map(sel=>FOODS[t][sel.foodIdx].name)
-  );
-  const ni=document.getElementById("bld-name");
-  if(ni&&parts.length>0)ni.placeholder=parts.join(" & ");
+function confirmBldAddIngPick(){
+  if(!bldIngPickSelected) return;
+  const amt = parseFloat(document.getElementById("bld-pick-ing-amt").value);
+  if(isNaN(amt)||amt<=0){ document.getElementById("bld-pick-ing-amt").focus(); return; }
+  bldIngredients.push(Object.assign({}, bldIngPickSelected, {a:amt}));
+  renderBldIngList(); renderBldTotal();
+  document.getElementById("bld-ing-add-form").classList.add("hidden");
+  bldIngPickSelected = null; bldIngPickBase = null;
+}
+
+function calcBldIngKcal(){
+  const p = parseFloat(document.getElementById("bld-new-ing-p").value)||0;
+  const c = parseFloat(document.getElementById("bld-new-ing-c").value)||0;
+  const f = parseFloat(document.getElementById("bld-new-ing-f").value)||0;
+  const k = +(p*4+c*4+f*9).toFixed(4);
+  document.getElementById("bld-new-ing-k").value = k>0 ? k : "";
+}
+
+function confirmBldAddIngManual(){
+  const name = document.getElementById("bld-new-ing-name").value.trim();
+  const amt  = parseFloat(document.getElementById("bld-new-ing-amt").value);
+  const unit = document.getElementById("bld-new-ing-unit").value;
+  const k = parseFloat(document.getElementById("bld-new-ing-k").value)||0;
+  const p = parseFloat(document.getElementById("bld-new-ing-p").value)||0;
+  const c = parseFloat(document.getElementById("bld-new-ing-c").value)||0;
+  const f = parseFloat(document.getElementById("bld-new-ing-f").value)||0;
+  if(!name||isNaN(amt)||amt<=0){ document.getElementById("bld-new-ing-name").focus(); return; }
+  bldIngredients.push({n:name, a:amt, u:unit, k, p, c, f});
+  renderBldIngList(); renderBldTotal();
+  document.getElementById("bld-ing-add-form").classList.add("hidden");
 }
 
 function saveBuildMeal(){
-  if(bldTotals.cal===0)return;
-  // Use first selected protein emoji, fallback to first carb, then default
-  let emoji="🍽️";
-  if(bld.protein.length>0) emoji=FOODS.protein[bld.protein[0].foodIdx].emoji;
-  else if(bld.carb.length>0) emoji=FOODS.carb[bld.carb[0].foodIdx].emoji;
-  const inputName=document.getElementById("bld-name").value.trim();
-  const parts=["protein","carb","fat"].flatMap(t=>
-    bld[t].map(sel=>FOODS[t][sel.foodIdx].name)
-  );
-  const name=inputName||(parts.join(" & ")||"My Plate");
-  meals=[...meals,{
-    id:uid(), name, emoji,
-    calories:bldTotals.cal, protein:bldTotals.p, carbs:bldTotals.c, fat:bldTotals.f
+  const name = document.getElementById("bld-name").value.trim();
+  if(!name){ document.getElementById("bld-name").focus(); return; }
+  if(!bldIngredients.length){ alert("Add at least one ingredient."); return; }
+  const t = bldIngredients.reduce((a,i)=>({k:a.k+i.k*i.a, p:a.p+i.p*i.a, c:a.c+i.c*i.a, f:a.f+i.f*i.a}),{k:0,p:0,c:0,f:0});
+  meals = [...meals, {
+    id:uid(), name, emoji:selEmoji, categories:selCategories.slice(),
+    calories:Math.round(t.k), protein:+t.p.toFixed(1), carbs:+t.c.toFixed(1), fat:+t.f.toFixed(1),
+    ingredients: bldIngredients.map(i=>Object.assign({},i))
   }];
-  persist();closeAdd();render();
+  persist(); closeAdd(); render();
 }
 
 // ═══════════════════════════════════════════════
