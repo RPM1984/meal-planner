@@ -2511,6 +2511,15 @@ const DEFAULT_MEALS = [
  "p": 0.09,
  "c": 0.05,
  "f": 0.2
+ },
+ {
+ "n": "Water",
+ "a": 150,
+ "u": "ml",
+ "k": 0,
+ "p": 0,
+ "c": 0,
+ "f": 0
  }
  ],
  "calories": 286,
@@ -2963,7 +2972,7 @@ const lsSet = (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); } cat
 function persist() { lsSet('mp-meals', meals); lsSet('mp-plan', plan); }
 
 // Separate versioning for meals and plan so bumping one doesn't wipe the other
-const MEALS_VERSION = "24";
+const MEALS_VERSION = "25";
 const PLAN_VERSION = "9";
 if (lsGet('mp-data-version') !== MEALS_VERSION) {
  lsSet('mp-data-version', MEALS_VERSION);
