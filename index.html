@@ -85,7 +85,6 @@
  .bar-lbl { font-size: 10px; color: var(--muted); width: 52px; flex: 0 0 52px; }
  .bar-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
  .bar-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .35s ease; }
- .bar-fill.near { background: var(--orange); }
  .bar-fill.over { background: var(--red); }
  .bar-nums { font-size: 10px; color: var(--muted); width: 80px; flex: 0 0 80px; text-align: right; white-space: nowrap; }
 
@@ -2997,6 +2996,26 @@ let meals = (() => {
  });
 })();
 
+// Deduplicate emojis — generic (🍽️ or none) may repeat, all others must be unique
+(() => {
+ const GENERIC = '🍽️';
+ const RESERVE = ['🍔','🌯','🥙','🥘','🍜','🍛','🍣','🍱','🥩','🥦','🌽','🍕','🥑','🫐','🍋','🥝','🍎','🫑','🥕','🧆','🧇','🥐','🍞','🫓','🧁','🎂','🍮','🫖','🧃','🍵','🫕'];
+ const seen = new Set();
+ let changed = false;
+ const usedByAll = new Set(meals.map(m => m.emoji).filter(e => e && e !== GENERIC));
+ const pool = RESERVE.filter(e => !usedByAll.has(e));
+ let pi = 0;
+ meals.forEach(m => {
+ if (!m.emoji || m.emoji === GENERIC) return;
+ if (seen.has(m.emoji)) {
+ while (pi < pool.length && seen.has(pool[pi])) pi++;
+ if (pi < pool.length) { m.emoji = pool[pi++]; changed = true; }
+ }
+ seen.add(m.emoji);
+ });
+ if (changed) persist();
+})();
+
 let plan = lsGet('mp-plan') || JSON.parse(JSON.stringify(DEFAULT_PLAN));
 const todayIdx = (new Date().getDay() + 6) % 7;
 let currentDay = DAYS[todayIdx];
@@ -3103,7 +3122,7 @@ function renderDay() {
  ];
  const barsHtml = '<div class="macro-bars">' + bars.map(b => {
  const pct = Math.min(b.val / b.target, 1) * 100;
- const cls = b.val > b.target ? 'over' : pct >= 88 ? 'near' : '';
+ const cls = (b.val < b.target * 0.95 || b.val > b.target * 1.05) ? 'over' : '';
  return '<div class="bar-row">'
  + '<div class="bar-lbl">' + b.lbl + '</div>'
  + '<div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + pct.toFixed(1) + '%"></div></div>'
