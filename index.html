@@ -3757,12 +3757,28 @@ function ovRenderIngs() {
  const k = Math.round(ing.k*ing.a), p = Math.round(ing.p*ing.a);
  return '<div class="ing-row">'
  + '<div class="ing-row-info">'
- + '<div class="ing-row-name">' + esc(ing.n) + ' <span style="color:var(--muted)">· ' + ing.a + ing.u + '</span></div>'
- + '<div class="ing-row-mac">' + k + ' kcal · ' + p + 'p · ' + Math.round(ing.c*ing.a) + 'c · ' + Math.round(ing.f*ing.a) + 'f</div>'
+ + '<div class="ing-row-name" style="display:flex;align-items:center;gap:6px;white-space:normal">'
+ + '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(ing.n) + '</span>'
+ + '<span style="display:flex;align-items:center;gap:3px;flex:0 0 auto">'
+ + '<input type="number" min="0" step="1" value="' + ing.a + '" style="width:52px;background:var(--surf);border:1.5px solid var(--border);border-radius:6px;padding:3px 6px;color:var(--text);font-family:\'DM Mono\',monospace;font-size:12px;outline:none;text-align:right" oninput="ovUpdateAmt(' + i + ',this.value)" onfocus="this.style.borderColor=\'var(--accent)\'" onblur="this.style.borderColor=\'var(--border)\'">'
+ + '<span style="color:var(--muted);font-size:11px">' + ing.u + '</span>'
+ + '</span>'
+ + '</div>'
+ + '<div class="ing-row-mac" id="ov-ing-mac-' + i + '">' + k + ' kcal · ' + p + 'p · ' + Math.round(ing.c*ing.a) + 'c · ' + Math.round(ing.f*ing.a) + 'f</div>'
  + '</div>'
  + '<button class="ing-del" onclick="ovRemoveIng(' + i + ')">✕</button>'
  + '</div>';
  }).join('');
+}
+
+function ovUpdateAmt(i, val) {
+ const amt = parseFloat(val);
+ if (isNaN(amt) || amt < 0) return;
+ ovIngs[i].a = amt;
+ const ing = ovIngs[i];
+ const macEl = document.getElementById('ov-ing-mac-' + i);
+ if (macEl) macEl.textContent = Math.round(ing.k*amt) + ' kcal · ' + Math.round(ing.p*amt) + 'p · ' + Math.round(ing.c*amt) + 'c · ' + Math.round(ing.f*amt) + 'f';
+ ovRenderTotal();
 }
 
 function ovRenderTotal() {
