@@ -331,7 +331,9 @@
  <button class="btn btn-s" style="flex:1" id="mv-copy-btn" onclick="mvToggleCopyPicker()">Copy to…</button>
  </div>
  <div id="mv-copy-wrap" style="display:none;margin-top:8px">
- <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Copy this meal to:</div>
+ <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Copy to slot:</div>
+ <div id="mv-copy-slots" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+ <div style="font-size:11px;color:var(--muted);margin-bottom:6px">On day(s):</div>
  <div id="mv-copy-days" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
  <button class="btn btn-p" style="width:100%" onclick="execCopyToDay()">Copy</button>
  </div>
@@ -3814,12 +3816,15 @@ function closeMealView() {
 }
 
 let mvCopySelection = new Set();
+let mvCopyTargetSlot = null;
 
 function mvToggleCopyPicker() {
  const wrap = document.getElementById('mv-copy-wrap');
  const opening = wrap.style.display === 'none';
  if (opening) {
  mvCopySelection = new Set();
+ mvCopyTargetSlot = mvSlot;
+ mvRenderCopySlots();
  mvRenderCopyDays();
  wrap.style.display = 'block';
  document.getElementById('mv-copy-btn').style.color = 'var(--accent)';
@@ -3835,6 +3840,20 @@ function mvRenderCopyDays() {
  ).join('');
 }
 
+function mvRenderCopySlots() {
+ document.getElementById('mv-copy-slots').innerHTML = SLOTS.map(s => {
+  const meta = SLOT_META[s];
+  const isOn = s === mvCopyTargetSlot;
+  const style = isOn ? 'background:' + meta.color + ';border-color:' + meta.color + ';color:#0c0c0c;font-weight:700' : '';
+  return '<button class="day-pill" style="' + style + '" onclick="mvSelectCopySlot(\'' + s + '\')">' + meta.icon + ' ' + s + '</button>';
+ }).join('');
+}
+
+function mvSelectCopySlot(s) {
+ mvCopyTargetSlot = s;
+ mvRenderCopySlots();
+}
+
 function mvToggleCopyDay(d) {
  if (mvCopySelection.has(d)) mvCopySelection.delete(d); else mvCopySelection.add(d);
  mvRenderCopyDays();
@@ -3842,14 +3861,15 @@ function mvToggleCopyDay(d) {
 
 function execCopyToDay() {
  if (!mvCopySelection.size) return;
+ if (!mvCopyTargetSlot) return;
  const mealId = plan[mvDay] && plan[mvDay][mvSlot];
  if (!mealId) return;
  const ov = getOverride(mvDay, mvSlot);
  mvCopySelection.forEach(d => {
  if (!plan[d]) plan[d] = {};
- plan[d][mvSlot] = mealId;
- if (ov) setOverride(d, mvSlot, ov.map(i => Object.assign({}, i)));
- else clearOverride(d, mvSlot);
+ plan[d][mvCopyTargetSlot] = mealId;
+ if (ov) setOverride(d, mvCopyTargetSlot, ov.map(i => Object.assign({}, i)));
+ else clearOverride(d, mvCopyTargetSlot);
  });
  persist();
  closeMealView();
