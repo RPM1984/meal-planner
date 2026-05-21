@@ -2998,6 +2998,7 @@ const DEFAULT_PLAN = {
 const lsGet = k => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch { return null; } };
 const lsSet = (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 function persist() { lsSet('mp-meals', meals); lsSet('mp-plan', plan); }
+function persistArchived() { lsSet('mp-archived-meals', archivedMeals); }
 
 // Separate versioning for meals and plan so bumping one doesn't wipe the other
 const MEALS_VERSION = "25";
@@ -3051,6 +3052,9 @@ let currentDay = DAYS[todayIdx];
 let currentTab = 'week';
 let libCat = 'All';
 
+let archivedMeals = lsGet('mp-archived-meals') || [];
+function findMeal(id) { return meals.find(x => x.id === id) || archivedMeals.find(x => x.id === id) || null; }
+
 // DAY OVERRIDES — keyed "Day||Slot", cleared every Monday
 let overrides = lsGet('mp-overrides') || {};
 function persistOverrides() { lsSet('mp-overrides', overrides); }
@@ -3089,7 +3093,7 @@ function mealMacros(m, day, slot) {
 
 function dayMacros(day) {
  return Object.entries(plan[day]||{}).filter(([,id]) => id).reduce((a, [slot, id]) => {
- const m = meals.find(x => x.id === id); if (!m) return a;
+ const m = findMeal(id); if (!m) return a;
  const mac = mealMacros(m, day, slot);
  return { cal: a.cal+mac.cal, p: a.p+mac.p, c: a.c+mac.c, f: a.f+mac.f };
  }, {cal:0, p:0, c:0, f:0});
@@ -3168,7 +3172,7 @@ function renderDay() {
 
  const slotsHtml = SLOTS.map(slot => {
  const id = plan[currentDay] && plan[currentDay][slot];
- const m = id ? meals.find(x => x.id === id) : null;
+ const m = id ? findMeal(id) : null;
  if (m) {
  const mac = mealMacros(m, currentDay, slot);
  const hasOv = !!getOverride(currentDay, slot);
@@ -3286,8 +3290,9 @@ function renderLib() {
 function setLibCat(c) { libCat = c; renderLib(); }
 function deleteMeal(id) {
  if (!confirm('Delete this meal?')) return;
+ const meal = meals.find(m => m.id === id);
+ if (meal) { archivedMeals.push(meal); persistArchived(); }
  meals = meals.filter(m => m.id !== id);
- for (const d of DAYS) for (const s of SLOTS) if (plan[d] && plan[d][s] === id) delete plan[d][s];
  persist(); renderLib(); renderWeek();
 }
 
@@ -3507,7 +3512,7 @@ function buildShopItems() {
  DAYS.forEach(day => {
  SLOTS.forEach(slot => {
  const id = plan[day] && plan[day][slot]; if (!id) return;
- const m = meals.find(x => x.id === id); if (!m || !m.ingredients || !m.ingredients.length) return;
+ const m = findMeal(id); if (!m || !m.ingredients || !m.ingredients.length) return;
  m.ingredients.forEach(ing => {
  const key = ing.n + '||' + ing.u;
  if (!map[key]) map[key] = { name:ing.n, unit:ing.u, total:0, days:[] };
@@ -3746,7 +3751,7 @@ let mvDay = null, mvSlot = null, mvFlipped = new Set();
 function openMealView(day, slot) {
  mvDay = day; mvSlot = slot; mvFlipped = new Set();
  const id = plan[day] && plan[day][slot]; if (!id) return;
- const m = meals.find(x => x.id === id); if (!m) return;
+ const m = findMeal(id); if (!m) return;
  const mac = mealMacros(m, day, slot);
  const hasOv = !!getOverride(day, slot);
  document.getElementById('mv-title').textContent = (m.emoji||'') + ' ' + m.name;
@@ -3804,7 +3809,7 @@ function renderMvIngs(m, day, slot) {
 
 function flipIng(i, mealId, day, slot) {
  if (mvFlipped.has(i)) mvFlipped.delete(i); else mvFlipped.add(i);
- const m = meals.find(x => x.id === mealId);
+ const m = findMeal(mealId);
  if (m) renderMvIngs(m, day || null, slot || null);
 }
 
@@ -3883,7 +3888,7 @@ let ovPickSel = null, ovPickBase = null, ovPickCook = 'raw';
 function openOverride(day, slot) {
  ovDay = day; ovSlot = slot;
  const id = plan[day] && plan[day][slot]; if (!id) return;
- const m = meals.find(x => x.id === id); if (!m) return;
+ const m = findMeal(id); if (!m) return;
  // Pre-load from existing override or master ingredients
  const existing = getOverride(day, slot);
  ovIngs = (existing || m.ingredients || []).map(i => Object.assign({}, i));
@@ -4065,7 +4070,7 @@ function printWeek() {
  let max = 0;
  DAYS.forEach(d => {
  const id = plan[d] && plan[d][slot];
- const m = id ? meals.find(x=>x.id===id) : null;
+ const m = id ? findMeal(id) : null;
  const ings = m ? (effectiveIngs(m,d,slot)||[]) : [];
  if (ings.length > max) max = ings.length;
  });
@@ -4080,13 +4085,13 @@ function printWeek() {
  const cols = DAYS.map((d, di) => {
  const totCal = activeSlots.reduce((s, slot) => {
  const id = plan[d] && plan[d][slot];
- const m = id ? meals.find(x=>x.id===id) : null;
+ const m = id ? findMeal(id) : null;
  return s + (m ? mealMacros(m,d,slot).cal : 0);
  }, 0);
 
  const slots = activeSlots.map(slot => {
  const id = plan[d] && plan[d][slot];
- const m = id ? meals.find(x=>x.id===id) : null;
+ const m = id ? findMeal(id) : null;
  const maxIngs = slotMaxIngs[slot];
 
  if (!m) {
