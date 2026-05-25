@@ -279,7 +279,7 @@
  <button onclick="printWeek()" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">🖨 Print</button>
  </div>
  </div>
- <div id="week-macro-snapshot" style="background:var(--surf);border-radius:14px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap"></div>
+ <div id="week-macro-snapshot" style="background:var(--surf);border-radius:14px;padding:12px 16px;margin-bottom:16px"></div>
  <div class="day-strip" id="day-strip"></div>
  <div id="week-panes" id="swipe-area">
  <div id="day-content"></div>
@@ -544,7 +544,11 @@ const CAT_COLORS = {
  "Pre-Workout": {bg:"rgba(240,160,96,.15)", text:"#f0a060"},
 };
 
-const TARGETS = { calories:2200, protein:170, carbs:226, fat:68, goal:'Maintenance' };
+const GOAL_MODES = {
+ 'Deficit':     { calories:2000, protein:170, carbs:177, fat:68 },
+ 'Maintenance': { calories:2200, protein:170, carbs:227, fat:68 },
+ 'Lean Bulk':   { calories:2400, protein:170, carbs:277, fat:68 },
+};
 
 const EMOJIS = ["🥗","🍗","🥚","🐟","🥩","🌱","🥣","🍚","🍝","🥔","🍠","🍞","🥑","🥜","🧀","🍎","🍌","🫐","🥛","🧃","🥦","🫛","🍱","🥙","🌮","🍜","🥘","🍮","🍦","🍫","🍰","🧁","🦐","🍲","🥞","☕","🍒","🧪","🍽️"];
 
@@ -3050,6 +3054,9 @@ let plan = lsGet('mp-plan') || JSON.parse(JSON.stringify(DEFAULT_PLAN));
 const todayIdx = (new Date().getDay() + 6) % 7;
 let currentDay = DAYS[todayIdx];
 let currentTab = 'week';
+let currentGoal = lsGet('mp-goal') || 'Deficit';
+function activeTargets() { const m = GOAL_MODES[currentGoal] || GOAL_MODES['Maintenance']; return Object.assign({}, m, {goal: currentGoal}); }
+function setGoal(g) { currentGoal = g; lsSet('mp-goal', g); renderWeek(); }
 let libCat = 'All';
 
 let archivedMeals = lsGet('mp-archived-meals') || [];
@@ -3124,12 +3131,17 @@ function renderWeekSnapshot() {
  let tot = {cal:0,p:0,c:0,f:0};
  DAYS.forEach(d => { const dm = dayMacros(d); tot.cal+=dm.cal; tot.p+=dm.p; tot.c+=dm.c; tot.f+=dm.f; });
  const avg = { cal:Math.round(tot.cal/7), p:Math.round(tot.p/7), c:Math.round(tot.c/7), f:Math.round(tot.f/7) };
- const T = TARGETS;
+ const T = activeTargets();
  const snap = document.getElementById('week-macro-snapshot');
  if (!snap) return;
+ const goalBtns = ['Deficit','Maintenance','Lean Bulk'].map(g => {
+  const active = g === currentGoal;
+  return '<button onclick="setGoal(\'' + g + '\')" style="flex:1;padding:5px 0;border:1.5px solid ' + (active ? 'var(--accent)' : 'var(--border)') + ';border-radius:8px;background:' + (active ? 'var(--accent)' : 'transparent') + ';color:' + (active ? '#0d0d0f' : 'var(--muted)') + ';font-size:11px;font-weight:' + (active ? '700' : '400') + ';cursor:pointer">' + g + '</button>';
+ }).join('');
  snap.innerHTML =
- '<div style="flex:1;min-width:0">'
- + '<div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Avg / day · <span style="color:var(--accent)">' + (T.goal||'Goal') + '</span></div>'
+ '<div style="display:flex;gap:6px;margin-bottom:10px">' + goalBtns + '</div>'
+ + '<div>'
+ + '<div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Avg / day · <span style="color:var(--accent)">' + T.goal + '</span></div>'
  + '<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12px">'
  + '<span><b style="color:var(--accent)">' + avg.cal + '</b> <span style="color:var(--muted)">/ ' + T.calories + ' kcal</span></span>'
  + '<span><b>' + avg.p + '</b> <span style="color:var(--muted)">/ ' + T.protein + 'g pro</span></span>'
@@ -3153,7 +3165,7 @@ function selectDay(d) { currentDay = d; renderStrip(); renderDay(); }
 
 function renderDay() {
  const mac = dayMacros(currentDay);
- const T = TARGETS;
+ const T = activeTargets();
  const bars = [
  { lbl:'Calories', val:mac.cal, target:T.calories, fmt: v => v + ' / ' + T.calories },
  { lbl:'Protein', val:mac.p, target:T.protein, fmt: v => v + 'g / ' + T.protein + 'g' },
@@ -4057,7 +4069,7 @@ function saveOverride() {
 // PRINT
 function printWeek() {
  const FULL = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
- const T = TARGETS;
+ const T = activeTargets();
 
  // Active slots (skip Pre-Workout if not used any day)
  const activeSlots = SLOTS.filter(slot =>
