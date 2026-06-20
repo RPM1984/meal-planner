@@ -562,8 +562,8 @@ const COOKING_VARIANTS = {
  raw: {k:1.40, p:0.19, c:0, f:0.070},
  cooked: {k:1.75, p:0.24, c:0, f:0.090} },
  "Lean Beef Mince": { emoji:"🥩", u:"g",
- raw: {k:1.70, p:0.21, c:0, f:0.080},
- cooked: {k:2.10, p:0.26, c:0, f:0.100} },
+ raw: {k:1.75, p:0.20, c:0, f:0.10},
+ cooked: {k:2.18, p:0.26, c:0, f:0.11} },
  "Prawns": { emoji:"🦐", u:"g",
  raw: {k:0.85, p:0.18, c:0, f:0.010},
  cooked: {k:0.99, p:0.21, c:0, f:0.010} },
@@ -640,7 +640,7 @@ const FOODS = {
  {name:"Chicken Breast (raw)",emoji:"🍗",p100:{cal:120,p:22.5,c:0,f:2.6},portions:[{s:"100g",g:100,vis:"palm"},{s:"150g",g:150,vis:"large palm"},{s:"200g",g:200,vis:"two palms"}]},
  {name:"Chicken Breast (cooked)",emoji:"🍗",p100:{cal:165,p:31,c:0,f:3.6},portions:[{s:"100g",g:100,vis:"palm"},{s:"150g",g:150,vis:"large palm"},{s:"200g",g:200,vis:"two palms"}]},
  {name:"Salmon",emoji:"🐟",p100:{cal:208,p:20,c:0,f:13},portions:[{s:"100g",g:100,vis:"deck of cards"},{s:"150g",g:150,vis:"palm"},{s:"200g",g:200,vis:"fillet"}]},
- {name:"Lean Beef Mince",emoji:"🥩",p100:{cal:250,p:26,c:0,f:15},portions:[{s:"100g",g:100,vis:"small"},{s:"150g",g:150,vis:"medium"},{s:"200g",g:200,vis:"large"}]},
+ {name:"Lean Beef Mince",emoji:"🥩",p100:{cal:218,p:26,c:0,f:11},portions:[{s:"100g",g:100,vis:"small"},{s:"150g",g:150,vis:"medium"},{s:"200g",g:200,vis:"large"}]},
  {name:"Eggs",emoji:"🥚",p100:{cal:155,p:13,c:1,f:11},portions:[{s:"2 eggs",g:100,vis:"2 med"},{s:"3 eggs",g:150,vis:"3 eggs"},{s:"4 eggs",g:200,vis:"4 large"}]},
  {name:"Egg Whites",emoji:"🫙",unit:"ml",p100:{cal:47,p:10,c:1,f:0},portions:[{s:"100ml",g:100,vis:"small"},{s:"150ml",g:150,vis:"medium"},{s:"200ml",g:200,vis:"large"}]},
  {name:"Greek Yogurt",emoji:"🥣",p100:{cal:56,p:9.3,c:4,f:0.2},portions:[{s:"100g",g:100,vis:"small pot"},{s:"150g",g:150,vis:"medium"},{s:"200g",g:200,vis:"large"}]},
@@ -1807,16 +1807,16 @@ const DEFAULT_MEALS = [
  "n": "Lean Beef Mince",
  "a": 125,
  "u": "g",
- "k": 2.5,
+ "k": 2.18,
  "p": 0.26,
  "c": 0,
- "f": 0.15
+ "f": 0.11
  }
  ],
- "calories": 820,
+ "calories": 780,
  "protein": 59,
  "carbs": 60,
- "fat": 37,
+ "fat": 32,
  "categories": [
  "Dinner",
  "Lunch"
@@ -2008,16 +2008,16 @@ const DEFAULT_MEALS = [
  "n": "Lean Beef Mince",
  "a": 100,
  "u": "g",
- "k": 2.5,
+ "k": 2.18,
  "p": 0.26,
  "c": 0,
- "f": 0.15
+ "f": 0.11
  }
  ],
- "calories": 688,
+ "calories": 656,
  "protein": 59,
  "carbs": 51,
- "fat": 21,
+ "fat": 17,
  "categories": [
  "Dinner",
  "Lunch"
@@ -3575,8 +3575,8 @@ const PORTION_GUIDE = {
  { hand:'Full palm', icon:'✋', desc:'whole palm, no fingers', raw:{g:150,cal:210,p:29}, cooked:{g:120,cal:210,p:29} },
  ]},
  { name:'Lean Beef Mince', emoji:'🥩', rows:[
- { hand:'Small cupped hand', icon:'🫴', desc:'one hand, slight cup', raw:{g:100,cal:170,p:21}, cooked:{g:85, cal:179,p:22} },
- { hand:'Full cupped hand', icon:'🤲', desc:'both hands cupped', raw:{g:150,cal:255,p:32}, cooked:{g:125,cal:263,p:33} },
+ { hand:'Small cupped hand', icon:'🫴', desc:'one hand, slight cup', raw:{g:100,cal:175,p:20}, cooked:{g:85, cal:185,p:22} },
+ { hand:'Full cupped hand', icon:'🤲', desc:'both hands cupped', raw:{g:150,cal:263,p:30}, cooked:{g:125,cal:273,p:33} },
  ]},
  { name:'Salmon', emoji:'🐟', rows:[
  { hand:'Small palm', icon:'🤏', desc:'fingers together, flat', raw:{g:100,cal:142,p:20}, cooked:{g:80, cal:148,p:20} },
