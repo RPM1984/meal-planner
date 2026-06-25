@@ -525,13 +525,14 @@ const DATA_VERSION = "9"; // bump this whenever DEFAULT_MEALS changes
 
 const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const FULL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const SLOTS = ["Pre-Workout","Breakfast","Lunch","Dinner","Dessert"];
-const CATEGORIES = ["Breakfast","Lunch","Dinner","Dessert","Pre-Workout"];
+const SLOTS = ["Pre-Workout","Breakfast","Lunch","Afternoon Tea","Dinner","Dessert"];
+const CATEGORIES = ["Breakfast","Lunch","Afternoon Tea","Dinner","Dessert","Pre-Workout"];
 
 const SLOT_META = {
  "Pre-Workout": {icon:"⚡️", color:"#f0a060"},
  Breakfast: {icon:"☀️", color:"#f0d060"},
  Lunch: {icon:"🌤️", color:"#60c0f0"},
+ "Afternoon Tea": {icon:"🍵", color:"#c8a850"},
  Dinner: {icon:"🌙", color:"#a060f0"},
  Dessert: {icon:"🍮", color:"#f060a0"},
 };
@@ -539,6 +540,7 @@ const SLOT_META = {
 const CAT_COLORS = {
  Breakfast: {bg:"rgba(240,208,96,.15)", text:"#f0d060"},
  Lunch: {bg:"rgba(96,192,240,.15)", text:"#60c0f0"},
+ "Afternoon Tea": {bg:"rgba(200,168,80,.15)", text:"#c8a850"},
  Dinner: {bg:"rgba(160,96,240,.15)", text:"#a060f0"},
  Dessert: {bg:"rgba(240,96,160,.15)", text:"#f060a0"},
  "Pre-Workout": {bg:"rgba(240,160,96,.15)", text:"#f0a060"},
