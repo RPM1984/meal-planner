@@ -4085,16 +4085,14 @@ function saveOverride() {
 }
 
 // TWEAK SUGGESTIONS
-let tweakDay = null, tweakSuggestions = [];
+let tweakDay = null, tweakOptions = [], selectedTweakIdx = 0;
 
-function suggestTweaksForDay(day) {
+function _tweaksForOrder(day, order) {
  const T = activeTargets();
  const cur = dayMacros(day);
- let gapP = T.protein - cur.p;
- let gapC = T.carbs - cur.c;
+ let gapP = T.protein - cur.p, gapC = T.carbs - cur.c;
  const sugs = [];
- const ORDER = ["Dinner","Lunch","Breakfast","Afternoon Tea","Pre-Workout","Dessert"];
- for (const slot of ORDER) {
+ for (const slot of order) {
   const id = plan[day] && plan[day][slot]; if (!id) continue;
   const m = findMeal(id); if (!m) continue;
   const ings = (effectiveIngs(m, day, slot) || []).map(i => Object.assign({}, i));
@@ -4131,56 +4129,124 @@ function suggestTweaksForDay(day) {
  return sugs;
 }
 
-function openTweakSheet(day) {
- tweakDay = day;
- tweakSuggestions = suggestTweaksForDay(day);
+function _tweaksSpread(day) {
  const T = activeTargets();
  const cur = dayMacros(day);
- document.getElementById('tweak-title').textContent = 'Suggest tweaks — ' + day;
+ const remGapP = T.protein - cur.p, remGapC = T.carbs - cur.c;
+ const filled = SLOTS.filter(s => plan[day] && plan[day][s]).map(slot => {
+  const id = plan[day][slot]; const m = findMeal(id); if (!m) return null;
+  const ings = (effectiveIngs(m, day, slot) || []).map(i => Object.assign({}, i));
+  return { slot, id, m, ings, mp: ings.reduce((a,i)=>a+i.p*i.a,0), mc: ings.reduce((a,i)=>a+i.c*i.a,0) };
+ }).filter(Boolean);
+ const totP = filled.reduce((s,f)=>s+f.mp,0), totC = filled.reduce((s,f)=>s+f.mc,0);
+ const sugs = [];
+ filled.forEach(({ slot, id, m, ings, mp, mc }) => {
+  const tweaks = [];
+  const sgP = totP > 0 ? remGapP * (mp / totP) : 0;
+  const sgC = totC > 0 ? remGapC * (mc / totC) : 0;
+  if (Math.abs(sgP) > 3) {
+   const dom = ings.reduce((b, i) => (!b || i.p * i.a > b.p * b.a) ? i : b, null);
+   if (dom && dom.p > 0.05) {
+    const newA = Math.max(dom.a * 0.2, Math.min(dom.a * 2, dom.a + sgP / dom.p));
+    const delta = newA - dom.a;
+    if (Math.abs(delta) >= 5) tweaks.push({ n: dom.n, currentAmt: dom.a, suggestedAmt: Math.round(newA), unit: dom.u,
+     dK: dom.k * delta, dP: dom.p * delta, dC: dom.c * delta, dF: dom.f * delta });
+   }
+  }
+  if (Math.abs(sgC) > 3) {
+   const dom = ings.reduce((b, i) => (!b || i.c * i.a > b.c * b.a) ? i : b, null);
+   if (dom && dom.c > 0.05 && !tweaks.find(t => t.n === dom.n)) {
+    const newA = Math.max(dom.a * 0.2, Math.min(dom.a * 2, dom.a + sgC / dom.c));
+    const delta = newA - dom.a;
+    if (Math.abs(delta) >= 5) tweaks.push({ n: dom.n, currentAmt: dom.a, suggestedAmt: Math.round(newA), unit: dom.u,
+     dK: dom.k * delta, dP: dom.p * delta, dC: dom.c * delta, dF: dom.f * delta });
+   }
+  }
+  if (tweaks.length) sugs.push({ slot, mealId: id, mealName: m.name, tweaks,
+   netK: tweaks.reduce((s,t)=>s+t.dK,0), netP: tweaks.reduce((s,t)=>s+t.dP,0),
+   netC: tweaks.reduce((s,t)=>s+t.dC,0), netF: tweaks.reduce((s,t)=>s+t.dF,0) });
+ });
+ return sugs;
+}
+
+function buildTweakOptions(day) {
+ return [
+  { label: 'Dinner focus', desc: 'Scale up your evening meal',
+   suggestions: _tweaksForOrder(day, ["Dinner","Lunch","Breakfast","Afternoon Tea","Pre-Workout","Dessert"]) },
+  { label: 'Spread evenly', desc: 'Small adjustments across all meals',
+   suggestions: _tweaksSpread(day) },
+  { label: 'Morning boost', desc: 'Front-load earlier in the day',
+   suggestions: _tweaksForOrder(day, ["Pre-Workout","Breakfast","Lunch","Afternoon Tea","Dinner","Dessert"]) },
+ ];
+}
+
+function _tweakOptCardHtml(opt, idx, cur, T) {
  const sign = v => (v >= 0 ? '+' : '') + Math.round(v);
- const totDK = tweakSuggestions.reduce((s,sg)=>s+sg.netK,0);
- const totDP = tweakSuggestions.reduce((s,sg)=>s+sg.netP,0);
- const totDC = tweakSuggestions.reduce((s,sg)=>s+sg.netC,0);
- const totDF = tweakSuggestions.reduce((s,sg)=>s+sg.netF,0);
+ const totDK = opt.suggestions.reduce((s,sg)=>s+sg.netK,0);
+ const totDP = opt.suggestions.reduce((s,sg)=>s+sg.netP,0);
+ const totDC = opt.suggestions.reduce((s,sg)=>s+sg.netC,0);
+ const totDF = opt.suggestions.reduce((s,sg)=>s+sg.netF,0);
  const newCal = Math.round(cur.cal+totDK), newP = Math.round(cur.p+totDP);
  const newC = Math.round(cur.c+totDC), newF = Math.round(cur.f+totDF);
- let html = '';
- if (!tweakSuggestions.length) {
-  html = '<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:14px">You\'re on track — no tweaks needed!</div>';
-  document.getElementById('tweak-actions').innerHTML = '<button class="btn btn-s" style="width:100%" onclick="closeTweakSheet()">Done</button>';
+ const isSel = idx === selectedTweakIdx;
+ let h = '<div id="tweak-opt-' + idx + '" onclick="selectTweakOption(' + idx + ')" style="border:2px solid '
+  + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer">';
+ h += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'
+  + '<div><div style="font-size:13px;font-weight:700;color:' + (isSel ? 'var(--accent)' : 'var(--text)') + '">'
+  + esc(opt.label) + '</div><div style="font-size:11px;color:var(--muted);margin-top:2px">' + esc(opt.desc) + '</div></div>'
+  + (isSel ? '<div style="color:var(--accent);font-size:16px;flex-shrink:0">✓</div>' : '') + '</div>';
+ if (!opt.suggestions.length) {
+  h += '<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0">No changes needed for this approach</div>';
  } else {
-  html += '<div style="background:var(--surf);border-radius:10px;padding:12px;margin-bottom:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center">';
-  [[' Calories',newCal,T.calories,''],[' Protein',newP,T.protein,'g'],[' Carbs',newC,T.carbs,'g'],[' Fat',newF,T.fat,'g']].forEach(([lbl,will,tgt,u]) => {
-   const gap = tgt - will;
-   const gapCol = Math.abs(gap) <= tgt * 0.05 ? 'var(--accent)' : gap > 0 ? 'var(--orange)' : '#e05050';
-   html += '<div><div style="font-size:9px;color:var(--muted);margin-bottom:3px">' + lbl + '</div>'
-    + '<div style="font-size:13px;font-weight:700">' + will + u + '</div>'
-    + '<div style="font-size:10px;color:var(--muted)">/ ' + tgt + u + '</div>'
-    + '<div style="font-size:10px;color:' + gapCol + '">' + (gap > 0 ? sign(-gap) : gap < 0 ? sign(-gap) : '✓') + '</div></div>';
-  });
-  html += '</div>';
-  html += '<div style="font-size:11px;color:var(--muted);margin-bottom:12px">These tweaks apply to ' + day + ' only — master recipes stay unchanged.</div>';
-  tweakSuggestions.forEach(sg => {
+  opt.suggestions.forEach(sg => {
    const meta = SLOT_META[sg.slot] || {};
-   html += '<div style="margin-bottom:14px"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">' + (meta.icon||'') + ' ' + sg.slot + ' · ' + esc(sg.mealName) + '</div>';
+   h += '<div style="margin-bottom:8px"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">'
+    + (meta.icon||'') + ' ' + sg.slot + ' · ' + esc(sg.mealName) + '</div>';
    sg.tweaks.forEach(t => {
     const up = t.suggestedAmt > t.currentAmt;
-    const arrowCol = up ? 'var(--orange)' : 'var(--accent)';
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">'
-     + '<div><div style="font-size:13px">' + esc(t.n) + '</div>'
-     + '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + t.currentAmt + t.unit
-     + ' → <b style="color:' + arrowCol + '">' + t.suggestedAmt + t.unit + '</b>'
-     + ' <span style="color:' + arrowCol + '">' + (up ? '↑' : '↓') + '</span></div></div>'
-     + '<div style="text-align:right;font-size:11px;color:var(--muted);white-space:nowrap">'
+    const ac = up ? 'var(--orange)' : 'var(--accent)';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)">'
+     + '<div style="font-size:12px">' + esc(t.n) + '<br><span style="font-size:11px;color:var(--muted)">'
+     + t.currentAmt + t.unit + ' → <b style="color:' + ac + '">' + t.suggestedAmt + t.unit + '</b>'
+     + ' <span style="color:' + ac + '">' + (up?'↑':'↓') + '</span></span></div>'
+     + '<div style="font-size:10px;color:var(--muted);text-align:right;white-space:nowrap">'
      + sign(t.dK) + ' kcal<br>' + sign(t.dP) + 'p · ' + sign(t.dC) + 'c · ' + sign(t.dF) + 'f</div></div>';
    });
-   html += '</div>';
+   h += '</div>';
   });
-  document.getElementById('tweak-actions').innerHTML =
-   '<button class="btn btn-s" onclick="closeTweakSheet()">Dismiss</button>'
-   + '<button class="btn btn-p" onclick="applyTweaks()">Apply tweaks</button>';
  }
- document.getElementById('tweak-body').innerHTML = html;
+ const calOk = Math.abs(T.calories - newCal) <= T.calories * 0.05;
+ const pOk = Math.abs(T.protein - newP) <= T.protein * 0.05;
+ h += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)">'
+  + 'Projected: <b style="color:' + (calOk ? 'var(--accent)' : 'var(--orange)') + '">' + newCal + ' kcal</b> · '
+  + '<b style="color:' + (pOk ? 'var(--accent)' : 'var(--orange)') + '">' + newP + 'p</b> · ' + newC + 'c · ' + newF + 'f</div>';
+ h += '</div>';
+ return h;
+}
+
+function selectTweakOption(idx) {
+ selectedTweakIdx = idx;
+ _renderTweakBody();
+}
+
+function _renderTweakBody() {
+ const T = activeTargets(), cur = dayMacros(tweakDay);
+ document.getElementById('tweak-body').innerHTML = tweakOptions.map((o, i) => _tweakOptCardHtml(o, i, cur, T)).join('');
+ document.getElementById('tweak-actions').innerHTML =
+  '<button class="btn btn-s" onclick="closeTweakSheet()">Dismiss</button>'
+  + '<button class="btn btn-p" onclick="applyTweaks()">Apply option ' + (selectedTweakIdx + 1) + '</button>';
+}
+
+function openTweakSheet(day) {
+ tweakDay = day; selectedTweakIdx = 0;
+ tweakOptions = buildTweakOptions(day);
+ document.getElementById('tweak-title').textContent = 'Suggest tweaks — ' + day;
+ if (!tweakOptions.some(o => o.suggestions.length)) {
+  document.getElementById('tweak-body').innerHTML = '<div style="text-align:center;padding:40px 16px;color:var(--muted);font-size:14px">You\'re on track — no tweaks needed!</div>';
+  document.getElementById('tweak-actions').innerHTML = '<button class="btn btn-s" style="width:100%" onclick="closeTweakSheet()">Done</button>';
+ } else {
+  _renderTweakBody();
+ }
  document.getElementById('ov-tweaks').classList.remove('hidden');
  document.body.style.overflow = 'hidden';
 }
@@ -4191,7 +4257,8 @@ function closeTweakSheet() {
 }
 
 function applyTweaks() {
- tweakSuggestions.forEach(({ slot, mealId, tweaks }) => {
+ const opt = tweakOptions[selectedTweakIdx]; if (!opt) return;
+ opt.suggestions.forEach(({ slot, mealId, tweaks }) => {
   const m = findMeal(mealId); if (!m) return;
   const ings = (effectiveIngs(m, tweakDay, slot) || []).map(i => Object.assign({}, i));
   tweaks.forEach(t => { const ing = ings.find(i => i.n === t.n); if (ing) ing.a = t.suggestedAmt; });
