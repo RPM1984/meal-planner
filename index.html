@@ -3001,16 +3001,31 @@ const DEFAULT_MEALS = [
  "protein": 48,
  "carbs": 51,
  "fat": 18
+ },
+ {
+ "id": "c32",
+ "emoji": "🧇",
+ "name": "Crumpet & Banana",
+ "ingredients": [
+ { "n": "Crumpet", "a": 1, "u": "crumpet", "k": 130, "p": 4, "c": 27, "f": 0.5 },
+ { "n": "Jam", "a": 20, "u": "g", "k": 2.5, "p": 0, "c": 0.65, "f": 0 },
+ { "n": "Banana (medium)", "a": 1, "u": "banana", "k": 107, "p": 1, "c": 27, "f": 0 }
+ ],
+ "calories": 287,
+ "protein": 5,
+ "carbs": 67,
+ "fat": 1,
+ "categories": ["Pre-Workout"]
  }
 ];
 
 const DEFAULT_PLAN = {
- Mon: { "Pre-Workout": "c17", "Breakfast": "c01", "Lunch": "c28", "Dinner": "c15" },
+ Mon: { "Pre-Workout": "c32", "Breakfast": "c08", "Lunch": "c28", "Dinner": "c15" },
  Tue: { "Breakfast": "c31", "Lunch": "c05", "Dinner": "c14" },
- Wed: { "Pre-Workout": "c17", "Breakfast": "c01", "Lunch": "c14", "Dinner": "c11" },
- Thu: { "Pre-Workout": "c17", "Breakfast": "c01", "Lunch": "c05", "Dinner": "c13" },
+ Wed: { "Pre-Workout": "c17", "Breakfast": "c08", "Lunch": "c14", "Dinner": "c11" },
+ Thu: { "Pre-Workout": "c32", "Breakfast": "c08", "Lunch": "c05", "Dinner": "c13" },
  Fri: { "Breakfast": "c03", "Lunch": "c29", "Dinner": "c15", "Dessert": "c20" },
- Sat: { "Pre-Workout": "c17", "Breakfast": "c01", "Lunch": "c05", "Dinner": "c30", "Dessert": "c18" },
+ Sat: { "Pre-Workout": "c32", "Breakfast": "c08", "Lunch": "c05", "Dinner": "c30", "Dessert": "c18" },
  Sun: { "Breakfast": "c02", "Lunch": "c09", "Dinner": "c28" },
 };
 
@@ -3022,8 +3037,8 @@ function persist() { lsSet('mp-meals', meals); lsSet('mp-plan', plan); }
 function persistArchived() { lsSet('mp-archived-meals', archivedMeals); }
 
 // Separate versioning for meals and plan so bumping one doesn't wipe the other
-const MEALS_VERSION = "25";
-const PLAN_VERSION = "10";
+const MEALS_VERSION = "26";
+const PLAN_VERSION = "11";
 if (lsGet('mp-data-version') !== MEALS_VERSION) {
  lsSet('mp-data-version', MEALS_VERSION);
  localStorage.removeItem('mp-meals');
