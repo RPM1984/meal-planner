@@ -390,7 +390,7 @@
  <option>g</option><option>ml</option><option>srv</option><option>egg</option><option>tbsp</option><option>tsp</option>
  </select>
  </div>
- <div class="alab" style="margin-bottom:6px">Macros per 1 unit</div>
+ <div class="alab" style="margin-bottom:6px">Total macros for this amount</div>
  <div class="macro-grid">
  <div class="mgcol"><label>kcal <span style="color:var(--accent);font-size:7px">auto</span></label><input type="number" id="ov-manual-k" placeholder="0" readonly style="color:var(--muted)"></div>
  <div class="mgcol"><label>protein</label><input type="number" id="ov-manual-p" placeholder="0" step="0.001" oninput="ovCalcK()"></div>
@@ -512,7 +512,7 @@
  <option>g</option><option>ml</option><option>srv</option><option>egg</option><option>tbsp</option><option>tsp</option>
  </select>
  </div>
- <div class="alab" style="margin-bottom:6px">Macros per 1 unit</div>
+ <div class="alab" style="margin-bottom:6px">Total macros for this amount</div>
  <div class="macro-grid">
  <div class="mgcol"><label>kcal <span style="color:var(--accent);font-size:7px">auto</span></label><input type="number" id="manual-k" placeholder="0" readonly style="color:var(--muted)"></div>
  <div class="mgcol"><label>protein</label><input type="number" id="manual-p" placeholder="0" step="0.001" oninput="calcManualK()"></div>
@@ -644,6 +644,7 @@ const KNOWN_INGREDIENTS = [
  {n:"Sourdough", emoji:"🍞", u:"slice", k:160, p:6.000, c:31.00, f:1.000},
  {n:"Red Lentils", emoji:"🫘", u:"g", k:3.53, p:0.260, c:0.600, f:0.010},
  {n:"White Potato (Low Carb)", emoji:"🥔", u:"g", k:0.546, p:0.019, c:0.095, f:0.010},
+ {n:"Quinoa (cooked)", emoji:"🍚", u:"g", k:1.20, p:0.044, c:0.213, f:0.019},
 
  // Treats & dessert
  {n:"Dark Chocolate (70%)", emoji:"🍫", u:"g", k:5.98, p:0.080, c:0.460, f:0.430},
@@ -3533,7 +3534,7 @@ function confirmManual() {
  const c = parseFloat(document.getElementById('manual-c').value)||0;
  const f = parseFloat(document.getElementById('manual-f').value)||0;
  if (!name || isNaN(amt) || amt <= 0) { document.getElementById('manual-name').focus(); return; }
- addIngs.push({ n:name, a:amt, u:unit, k:k, p:p, c:c, f:f });
+ addIngs.push({ n:name, a:amt, u:unit, k:k/amt, p:p/amt, c:c/amt, f:f/amt });
  renderAddIngs(); renderAddTotal();
  document.getElementById('pick-form').classList.add('hidden');
  ['manual-name','manual-amt','manual-k','manual-p','manual-c','manual-f'].forEach(id => document.getElementById(id).value = '');
@@ -4088,7 +4089,7 @@ function ovConfirmManual() {
  const c = parseFloat(document.getElementById('ov-manual-c').value)||0;
  const f = parseFloat(document.getElementById('ov-manual-f').value)||0;
  if (!name || isNaN(amt) || amt <= 0) return;
- ovIngs.push({ n:name, a:amt, u:unit, k, p, c, f });
+ ovIngs.push({ n:name, a:amt, u:unit, k:k/amt, p:p/amt, c:c/amt, f:f/amt });
  ovRenderIngs(); ovRenderTotal();
  document.getElementById('ov-pick-form').classList.add('hidden');
  ['ov-manual-name','ov-manual-amt','ov-manual-k','ov-manual-p','ov-manual-c','ov-manual-f'].forEach(id => document.getElementById(id).value = '');
