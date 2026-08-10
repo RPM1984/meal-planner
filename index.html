@@ -272,11 +272,14 @@
 <div id="print-view" style="display:none"></div>
 <div class="app">
  <div id="view-week" class="page">
- <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px">
+ <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;flex-wrap:wrap;gap:8px">
  <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">This Week</div>
- <div style="display:flex;gap:8px">
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
  <button onclick="resetPlan()" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">↺ Reset</button>
  <button onclick="printWeek()" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">🖨 Print</button>
+ <button onclick="exportData()" title="Export your meals & plan as a backup file" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">⭳ Export</button>
+ <button onclick="document.getElementById('import-file').click()" title="Import a previously exported backup file" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">⭱ Import</button>
+ <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importData(event)">
  </div>
  </div>
  <div id="week-macro-snapshot" style="background:var(--surf);border-radius:14px;padding:12px 16px;margin-bottom:16px"></div>
@@ -3155,6 +3158,49 @@ function resetPlan() {
  plan = JSON.parse(JSON.stringify(DEFAULT_PLAN));
  lsSet('mp-plan', plan);
  renderWeek();
+}
+
+// IMPORT / EXPORT — lets you back up your meals + plan outside localStorage,
+// so a version bump or a cleared browser doesn't lose your customisations.
+function exportData() {
+ const data = { format: 'meal-planner-backup', version: 1, exportedAt: new Date().toISOString(), meals: meals, archivedMeals: archivedMeals, plan: plan, goal: currentGoal };
+ const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = 'meal-planner-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+ const file = event.target.files[0];
+ if (!file) return;
+ const reader = new FileReader();
+ reader.onload = () => {
+ event.target.value = '';
+ let data;
+ try { data = JSON.parse(reader.result); }
+ catch { alert('Could not import: that file is not valid JSON.'); return; }
+ if (!data || !Array.isArray(data.meals) || typeof data.plan !== 'object') {
+ alert('Could not import: that doesn\'t look like a meal planner backup file.');
+ return;
+ }
+ if (!confirm('Import this backup? It will replace your current meals and plan.')) return;
+ meals = data.meals;
+ archivedMeals = Array.isArray(data.archivedMeals) ? data.archivedMeals : [];
+ plan = data.plan;
+ if (data.goal && GOAL_MODES[data.goal]) currentGoal = data.goal;
+ persist();
+ persistArchived();
+ lsSet('mp-goal', currentGoal);
+ renderWeek();
+ renderLib();
+ alert('Import complete.');
+ };
+ reader.readAsText(file);
 }
 
 // WEEK
