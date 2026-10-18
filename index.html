@@ -3021,6 +3021,30 @@ const DEFAULT_MEALS = [
  "carbs": 67,
  "fat": 1,
  "categories": ["Pre-Workout"]
+ },
+ {
+ "id": "c33",
+ "emoji": "🥬",
+ "name": "Spaghetti Bolognese (Cabbage)",
+ "ingredients": [
+ { "n": "Carrots", "a": 30, "u": "g", "k": 0.41, "p": 0.01, "c": 0.1, "f": 0 },
+ { "n": "Onion (cooked)", "a": 10, "u": "g", "k": 0.44, "p": 0.01, "c": 0.1, "f": 0 },
+ { "n": "Celery", "a": 10, "u": "g", "k": 0.16, "p": 0.01, "c": 0.03, "f": 0 },
+ { "n": "Red Wine", "a": 25, "u": "ml", "k": 0.85, "p": 0, "c": 0.03, "f": 0 },
+ { "n": "Cabbage (medium)", "a": 0.25, "u": "cabbage", "k": 225, "p": 12, "c": 52, "f": 1 },
+ { "n": "Anchovies", "a": 2, "u": "g", "k": 2.1, "p": 0.29, "c": 0, "f": 0.1 },
+ { "n": "Parmesan", "a": 10, "u": "g", "k": 4.31, "p": 0.38, "c": 0.04, "f": 0.29 },
+ { "n": "Full Cream Milk", "a": 30, "u": "g", "k": 0.69, "p": 0.03, "c": 0.05, "f": 0.04 },
+ { "n": "Tomato Passata", "a": 50, "u": "g", "k": 0.25, "p": 0.01, "c": 0.05, "f": 0 },
+ { "n": "Red Lentils (cooked)", "a": 15, "u": "g", "k": 1.16, "p": 0.09, "c": 0.20, "f": 0.004 },
+ { "n": "Lean Beef Mince", "a": 100, "u": "g", "k": 2.18, "p": 0.26, "c": 0, "f": 0.11 },
+ { "n": "Bulla Cottage Cheese", "a": 100, "u": "g", "k": 0.82, "p": 0.12, "c": 0.043, "f": 0.018 }
+ ],
+ "calories": 530,
+ "protein": 52,
+ "carbs": 36,
+ "fat": 17,
+ "categories": ["Dinner", "Lunch"]
  }
 ];
 
@@ -3042,7 +3066,7 @@ function persist() { lsSet('mp-meals', meals); lsSet('mp-plan', plan); }
 function persistArchived() { lsSet('mp-archived-meals', archivedMeals); }
 
 // Separate versioning for meals and plan so bumping one doesn't wipe the other
-const MEALS_VERSION = "26";
+const MEALS_VERSION = "27";
 const PLAN_VERSION = "11";
 if (lsGet('mp-data-version') !== MEALS_VERSION) {
  lsSet('mp-data-version', MEALS_VERSION);
