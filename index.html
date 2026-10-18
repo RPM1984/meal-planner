@@ -3066,7 +3066,7 @@ function persist() { lsSet('mp-meals', meals); lsSet('mp-plan', plan); }
 function persistArchived() { lsSet('mp-archived-meals', archivedMeals); }
 
 // Separate versioning for meals and plan so bumping one doesn't wipe the other
-const MEALS_VERSION = "27";
+const MEALS_VERSION = "26";
 const PLAN_VERSION = "11";
 if (lsGet('mp-data-version') !== MEALS_VERSION) {
  lsSet('mp-data-version', MEALS_VERSION);
